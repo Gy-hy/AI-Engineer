@@ -1,0 +1,31 @@
+# Python 虚拟环境
+ai-engineer/
+.venv/
+venv/
+env/
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 环境变量（含密钥）
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
