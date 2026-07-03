@@ -36,3 +36,6 @@ black>=24.0
 # --- 打包与构建 ---
 build>=1.0
 twine>=5.0
+
+# --- 文档 ---
+mkdocs-material
