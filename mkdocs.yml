@@ -43,7 +43,18 @@ nav:
           - 层级说明: 主题/第1层 软件工程/README.md
           - 1.1 Python高级:
               - 01 学习目标: 主题/第1层 软件工程/1.1 Python高级/01 学习目标.md
-              - 02 教程: 主题/第1层 软件工程/1.1 Python高级/02 教程.md
+              - 02 教程导读: 主题/第1层 软件工程/1.1 Python高级/02 教程.md
+              - 02.1 Python高级: 主题/第1层 软件工程/1.1 Python高级/02 教程/01 Python高级.md
+              - 02.2 OOP: 主题/第1层 软件工程/1.1 Python高级/02 教程/02 OOP.md
+              - 02.3 typing: 主题/第1层 软件工程/1.1 Python高级/02 教程/03 typing.md
+              - 02.4 asyncio: 主题/第1层 软件工程/1.1 Python高级/02 教程/04 asyncio.md
+              - 02.5 Context Manager: 主题/第1层 软件工程/1.1 Python高级/02 教程/05 Context Manager.md
+              - 02.6 Decorator: 主题/第1层 软件工程/1.1 Python高级/02 教程/06 Decorator.md
+              - 02.7 Generator: 主题/第1层 软件工程/1.1 Python高级/02 教程/07 Generator.md
+              - 02.8 Logging: 主题/第1层 软件工程/1.1 Python高级/02 教程/08 Logging.md
+              - 02.9 Packaging: 主题/第1层 软件工程/1.1 Python高级/02 教程/09 Packaging.md
+              - 02.10 Testing: 主题/第1层 软件工程/1.1 Python高级/02 教程/10 Testing.md
+              - 02.11 Performance: 主题/第1层 软件工程/1.1 Python高级/02 教程/11 Performance.md
               - 03 习题: 主题/第1层 软件工程/1.1 Python高级/03 习题.md
           - 1.2 Git:
               - 01 学习目标: 主题/第1层 软件工程/1.2 Git/01 学习目标.md
