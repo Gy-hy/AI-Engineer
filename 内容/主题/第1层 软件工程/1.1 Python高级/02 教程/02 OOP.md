@@ -1012,3 +1012,897 @@ class Stack:
 | 协作式多继承 | 每个类用 `super().__init__(**kwargs)` 把不认识的参数往下传——链不断，所有父类都初始化 |
 | `__init_subclass__` | 子类继承时自动触发——注册模式/插件系统的基础 |
 | 继承 vs 组合 | 继承是 is-a，组合是 has-a；覆盖了父类大部分方法 → 你应该用组合 |
+
+---
+
+## 四、多态
+
+### 4.1 多态是什么
+
+多态（Polymorphism）的字面意思是"多种形态"。在 OOP 中它指的是：
+
+> **同一个接口（方法名），不同的对象给出不同的实现，调用方不需要知道具体是哪个实现。**
+
+```python
+def make_sound(animal) -> str:
+    return animal.speak()     # 调用方只依赖 speak() 这个接口
+
+class Dog:
+    def speak(self):
+        return "woof!"
+
+class Cat:
+    def speak(self):
+        return "meow!"
+
+class Duck:
+    def speak(self):
+        return "quack!"
+
+>>> for animal in [Dog(), Cat(), Duck()]:
+...     print(make_sound(animal))
+# woof!
+# meow!
+# quack!
+```
+
+`make_sound` 不知道也不关心传进来的是什么类——只要它有 `speak()` 方法就能工作。这是多态最核心的价值：**调用方写一次，实现方随意扩展。**
+
+注意这三个类**没有任何继承关系**——它们只是碰巧都有 `speak()` 方法。这在 Java 里不可能（Java 的多态要求显式 `implements Animal` 接口），但在 Python 里这是多态的标准形式。
+
+---
+
+### 4.2 Duck Typing —— Python 的多态机制
+
+#### "如果它像鸭子一样走路、像鸭子一样叫，那它就是鸭子"
+
+**Duck Typing（鸭子类型）**是 Python 多态的底层哲学：**一个对象的类型由它的行为（方法）决定，而不是由它继承自谁决定。**
+
+```python
+def calculate_total(items) -> float:
+    total = 0.0
+    for item in items:          # 要求：可迭代
+        total += item           # 要求：支持 + 运算
+    return total
+
+>>> calculate_total([1, 2, 3])            # list 可以
+>>> calculate_total((1.5, 2.5))           # tuple 可以
+>>> calculate_total({"a": 1})             # dict 可以——迭代的是 key
+>>> calculate_total(range(10))            # range 可以
+```
+
+`calculate_total` 不检查 `isinstance(items, list)`——它只要求传入的对象"像序列一样能迭代"。任何满足这个行为契约的对象都能工作。
+
+#### Duck Typing vs 名义类型（Nominal Typing）的对比
+
+| | Java/C++（名义类型） | Python（鸭子类型） |
+|---|---|---|
+| 多态的资格 | 必须显式 `implements`/`extends` 声明的接口或类 | 有正确的方法就行——不需要任何声明 |
+| 类型检查 | 编译期强制——不满足就编译失败 | 运行时——调用不存在的方法时 `AttributeError` |
+| 扩展性 | 新类型要符合已有接口，接口要先被设计出来 | 新类型只要"行为正确"就能无缝插入 |
+| 风险 | 更安全——错误在编译期暴露 | 更灵活——错误可能要到运行时才暴露 |
+
+鸭子类型的本质是**结构化类型（Structural Typing）**：类型由结构（有什么方法）决定，不由名字（叫什么、继承自谁）决定。
+
+**Duck Typing 的典型陷阱：**
+
+```python
+class Dog:
+    def speak(self):
+        return "woof!"
+
+def make_sound(animal):
+    return animal.speak()     # 鸭子类型——期望参数有 .speak()
+
+>>> make_sound(Dog())          # 可以
+>>> make_sound("hello")        # AttributeError: 'str' object has no attribute 'speak'
+```
+
+鸭子类型不检查类型，只在使用时验证。如果你的函数期望一个"有 speak() 方法的对象"，但调用者传了个没有这个方法的对象，错误会在**运行时**爆发——可能是代码深处、可能是在生产环境。这就是为什么类型标注（typing）在大型工程中变得重要——`Protocol` 可以在静态检查阶段补上这层保护（后面的 typing 章节会讲）。
+
+---
+
+### 4.3 Override —— 覆盖
+
+#### 方法覆盖
+
+子类定义一个和父类同名的方法，就覆盖了父类的实现：
+
+```python
+class Animal:
+    def speak(self):
+        return "..."
+
+class Dog(Animal):
+    def speak(self):          # 覆盖——同名方法
+        return "woof!"
+
+class SilentDog(Dog):
+    pass                      # 不覆盖——继承 Dog 的实现
+
+>>> Dog().speak()         # "woof!"——覆盖生效
+>>> SilentDog().speak()   # "woof!"——继承 Dog 的实现
+```
+
+Override 不需要任何特殊关键字（Java 要 `@Override` 注解）——同名即可。查找机制就是 1.3 节的属性查找：MRO 链上先遇到子类的 `speak`，父类的就被遮住了。
+
+#### 覆盖时调用被覆盖的方法——`super()`
+
+覆盖一个方法时，最常见需求是"在父类逻辑的基础上**扩展**"，而不是完全替换：
+
+```python
+class Animal:
+    def __init__(self, name: str):
+        self.name = name
+
+class Dog(Animal):
+    def __init__(self, name: str, breed: str):
+        super().__init__(name)    # 先跑父类的初始化逻辑
+        self.breed = breed        # 再初始化自己的属性
+```
+
+`super()` 在这里返回 MRO 中 `Dog` 的下一个类（单继承下就是 `Animal`），调用它的 `__init__`——先完成父类的初始化，再初始化子类自己的部分。
+
+**不调用 `super()` 的后果：** 父类的初始化逻辑被完全跳过——`self.name` 永远不会被设置：
+
+```python
+class BadDog(Animal):
+    def __init__(self, name: str, breed: str):
+        self.breed = breed        # 忘了 super().__init__(name)！
+
+>>> bad = BadDog("Rex", "Labrador")
+>>> bad.breed     # "Labrador"
+>>> bad.name      # AttributeError——父类初始化从未执行
+```
+
+这种 bug 不会立即报错——`BadDog` 能正常实例化，但所有依赖 `name` 的方法在稍后某个时刻才崩溃。**覆盖 `__init__` 时忘记 `super().__init__()` 是 OOP 最常见的错误之一。**
+
+#### 覆盖的完整行为表
+
+| 子类动作 | 效果 |
+|---------|------|
+| 不定义该方法 | 完整继承父类实现 |
+| 定义同名方法，不调 `super()` | 完全替换——父类逻辑不执行 |
+| 定义同名方法，调 `super().method()` | 扩展——先（或后）执行父类逻辑，再加入自己的 |
+
+第三种模式叫 **Template Method 模式**的一种变体——父类定义流程骨架，子类通过覆盖特定方法来定制具体步骤。这是继承最有价值的用法之一（设计原则一节会进一步展开）。
+
+---
+
+### 4.4 多态的工程价值——以插件系统为例
+
+OOP 的必做项目是插件系统。多态是它成立的基础：
+
+```python
+# 主程序只知道统一的接口——这是多态的"调用方"
+class DocumentReader:                     # Port——统一接口
+    def read(self, path: str) -> str:
+        raise NotImplementedError
+
+class PDFReader(DocumentReader):          # Adapter 1
+    def read(self, path: str) -> str:
+        return f"[PDF] {path}"
+
+class DocxReader(DocumentReader):         # Adapter 2
+    def read(self, path: str) -> str:
+        return f"[DOCX] {path}"
+
+def process_file(reader: DocumentReader, path: str) -> str:
+    return reader.read(path)              # 多态调用——不关心具体是哪个 Reader
+
+>>> process_file(PDFReader(), "report.pdf")   # "[PDF] report.pdf"
+>>> process_file(DocxReader(), "notes.docx")  # "[DOCX] notes.docx"
+```
+
+`process_file` 只依赖 `read()` 接口。以后要支持 Excel、Markdown、任何格式，只需**新增一个类**——主程序一行都不用改。这就是多态 + 插件系统 = **开放封闭原则（Open-Closed Principle）**：对扩展开放，对修改封闭。
+
+---
+
+### 4.5 总结
+
+| 知识点 | 一句话要点 |
+|--------|----------|
+| 多态 | 同一接口、不同实现——调用方只依赖方法名，不依赖具体类型 |
+| Duck Typing | 类型由行为决定——有 `speak()` 的就是"会叫的动物"，不需要继承声明 |
+| 鸭子类型的代价 | 错误从编译期推迟到运行时——大型工程用类型标注（Protocol）补回安全性 |
+| Override | 子类同名方法覆盖父类——无特殊语法，靠 MRO 查找顺序实现 |
+| 覆盖 + super() | 在父类逻辑基础上扩展——忘调 `super().__init__()` 是最常见的 OOP 错误 |
+| 多态的工程价值 | 开放封闭原则——新增插件不改主程序；插件系统项目的基础 |
+
+---
+
+## 五、抽象
+
+### 5.1 抽象是什么，为什么需要
+
+鸭子类型有个问题：**它不表达意图。** 看这段代码：
+
+```python
+class PDFReader:
+    def read(self, path: str) -> str:
+        ...
+
+class DocxReader:
+    def read(self, path: str) -> str:
+        ...
+```
+
+`PDFReader` 和 `DocxReader` 都有 `read()`——但从代码结构上看不出**这是巧合还是约定**。没有东西在说："任何 Reader 都必须实现 `read()` 方法。" 如果新同事写了一个 `ExcelReader` 但忘了 `read()` 方法（比如写成了 `parse()`），什么都不会发生——直到运行时某个调用点 `AttributeError` 爆炸。
+
+**抽象（Abstraction）解决的就是这个问题：把"接口约定"从"巧合"变成"声明"。** Python 提供两个工具：**ABC**（运行时强制）和 **Protocol**（静态检查，typing 章节讲）。本节讲 ABC。
+
+---
+
+### 5.2 ABC 与 `abstractmethod`
+
+#### 基本用法
+
+```python
+from abc import ABC, abstractmethod
+
+class DocumentReader(ABC):                       # 继承 ABC——标记为抽象基类
+    @abstractmethod
+    def read(self, path: str) -> str:            # 抽象方法——子类必须实现
+        ...
+
+class PDFReader(DocumentReader):
+    def read(self, path: str) -> str:            # 实现了——可以实例化
+        return f"[PDF] {path}"
+
+class ExcelReader(DocumentReader):               # 没有实现 read()！
+    pass
+```
+
+```python
+>>> PDFReader()               # 可以——read 已实现
+>>> DocumentReader()          # TypeError: Can't instantiate abstract class DocumentReader
+                              # with abstract method read
+>>> ExcelReader()             # TypeError: Can't instantiate abstract class ExcelReader
+                              # with abstract method read
+```
+
+**ABC 的运行时行为：**
+
+1. `DocumentReader` 继承 `ABC`——`ABC` 的元类（metaclass）是 `ABCMeta`，它记录了哪些方法是抽象的。
+2. `DocumentReader` 自己不能实例化——它包含未实现的抽象方法。
+3. `ExcelReader` 也不能实例化——它继承了 `read` 但 `read` 仍然是抽象的（没有被覆盖成具体实现）。
+4. `PDFReader` 可以实例化——它覆盖了 `read`，`read` 不再是抽象的。
+
+**这就是 ABC 和鸭子类型的本质区别：** 鸭子类型"默认信任，出错再说"；ABC **在实例化时就拒绝**不完整的实现——错误提前暴露，而且错误信息精确到"哪个类缺哪个方法"。
+
+#### `abstractmethod` 的细节
+
+抽象方法可以有默认实现——子类可以用 `super()` 调用它：
+
+```python
+from abc import ABC, abstractmethod
+
+class DocumentReader(ABC):
+    @abstractmethod
+    def read(self, path: str) -> str:
+        return f"[generic] {path}"    # 抽象方法可以有实现体
+
+class PDFReader(DocumentReader):
+    def read(self, path: str) -> str:
+        return super().read(path).replace("generic", "PDF")
+        # 复用抽象基类里的默认实现
+```
+
+`@abstractmethod` 的语义是"**子类必须覆盖这个方法**"——不是"这个方法不能有实现体"。这是常见的误解。
+
+**`@abstractmethod` 和 `@property` 的组合——注意顺序：**
+
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @property
+    @abstractmethod
+    def area(self) -> float:
+        ...
+
+# ❌ 顺序错了：
+class Wrong(ABC):
+    @abstractmethod
+    @property          # 这样写 property 会把 abstractmethod 包住——abstract 标记失效
+    def area(self) -> float:
+        ...
+```
+
+规则：**`@abstractmethod` 必须是最内层（最靠近 `def`）的装饰器。** 这样它标记的是"这个方法本身"，而外层的 `@property`、`@classmethod` 等包装器才能正常生效。
+
+---
+
+### 5.3 标准库中的 ABC——`collections.abc`
+
+ABC 不只是你自己的代码里用——**Python 标准库本身就大量使用 ABC 来定义协议**：
+
+```python
+from collections.abc import Iterable, Iterator, Sequence, Mapping, MutableMapping, Callable
+
+>>> isinstance([1, 2, 3], Sequence)       # True——list 是 Sequence
+>>> isinstance("hello", Sequence)         # True——str 是 Sequence
+>>> isinstance({"a": 1}, Mapping)         # True——dict 是 Mapping
+>>> isinstance(lambda x: x, Callable)     # True——函数是 Callable
+```
+
+`collections.abc` 定义了 Python 数据结构的**接口层级**——`Iterable`、`Iterator`、`Sequence`、`Mapping`、`Set` 等。这层 ABC 有双重用途：
+
+1. **检查协议**：`isinstance(obj, Iterable)` 检查 obj 是否可迭代——不是检查继承自谁，而是检查**有没有实现 `__iter__`**（或 `__getitem__` 等后备协议）。
+2. **继承获得默认实现**：继承 `Sequence` 并实现 `__getitem__` 和 `__len__`，就免费获得 `__contains__`、`__iter__`、`index`、`count` 等方法——这些方法都基于 `__getitem__` 的默认实现。
+
+第 2 点是 mixin 模式的体现——这也是 Collection Library 项目中实现自定义容器时的标准做法（Python 高级教程 5.4 节有完整展开）。
+
+---
+
+### 5.4 抽象方法的检测机制——`__abstractmethods__`
+
+理解 ABC 的底层有助于调试：
+
+```python
+>>> from abc import ABC, abstractmethod
+>>> class Base(ABC):
+...     @abstractmethod
+...     def method(self):
+...         ...
+...
+>>> Base.__abstractmethods__      # frozenset({'method'})
+>>> class Concrete(Base):
+...     def method(self):
+...         pass
+...
+>>> Concrete.__abstractmethods__  # frozenset()
+```
+
+- 每个类有一个 `__abstractmethods__` 属性——它是**尚未被实现的抽象方法名的集合**。
+- 实例化时 Python 检查 `cls.__abstractmethods__`——非空就 `TypeError`。
+- 子类覆盖了抽象方法 → 名字从集合中移除 → 集合空了 → 可以实例化。
+
+**这个机制的解释力：** `ExcelReader`（没实现 `read`）的 `__abstractmethods__` 里还有 `read`，所以不能实例化。`PDFReader` 的集合是空的，所以可以。
+
+---
+
+### 5.5 ABC vs Duck Typing——什么时候用哪个
+
+| 场景 | 用 Duck Typing | 用 ABC |
+|------|--------------|--------|
+| 只有一两个方法的小接口，内部使用 | ✅ | 过度设计 |
+| 接口会被第三方/其他模块实现——需要**文档化的契约** | ❌ | ✅ |
+| 错误要**尽早暴露**（实例化时 vs 调用时） | ❌ | ✅ |
+| 需要 `isinstance` 检查（比如插件注册、序列化分发） | ❌ | ✅ |
+| 灵活的原型/脚本 | ✅ | 过度设计 |
+
+**经验法则：** 内部小接口用鸭子类型（灵活）；跨模块/跨团队/被插件实现的公共接口用 ABC（明确的契约 + 早期失败）。插件系统项目就是后者的典型场景——插件开发者需要一份明确的"必须实现什么"的清单，ABC 就是这个清单。
+
+---
+
+### 5.6 总结
+
+| 知识点 | 一句话要点 |
+|--------|----------|
+| 抽象的作用 | 把"接口约定"从巧合变成声明——新实现缺方法时立即失败 |
+| `ABC` + `abstractmethod` | 含未实现抽象方法的类不能实例化——错误提前到实例化时暴露 |
+| 抽象方法可有实现体 | `abstractmethod` 语义是"子类必须覆盖"，不是"不能有实现" |
+| 装饰器顺序 | `@abstractmethod` 必须是最内层——`@property`/`@classmethod` 在外层 |
+| `collections.abc` | 标准库的接口层级——`isinstance` 检查协议 + mixin 提供默认实现 |
+| `__abstractmethods__` | 未实现抽象方法名的集合——实例化时非空即 `TypeError` |
+| ABC vs Duck Typing | 内部小接口用鸭子类型；跨模块公共接口用 ABC——插件系统属于后者 |
+
+---
+
+## 六、数据类
+
+### 6.1 问题：样板代码（Boilerplate）
+
+写一个"只存数据"的类，传统方式要写大量机械的样板代码：
+
+```python
+class Point:
+    def __init__(self, x: float, y: float):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):                    # 打印友好
+        return f"Point(x={self.x}, y={self.y})"
+
+    def __eq__(self, other):               # 值相等判断
+        if not isinstance(other, Point):
+            return NotImplemented
+        return self.x == other.x and self.y == other.y
+```
+
+`__init__`、`__repr__`、`__eq__` 这些代码和"Point 有两个坐标"这个业务信息毫无关系——它们是每个数据类都要重复的机械劳动。
+
+**`@dataclass` 解决的问题：** 用声明字段的方式描述数据类，让 Python 自动生成这些方法：
+
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+```
+
+就这么简单。`dataclass` 会自动生成 `__init__`、`__repr__`、`__eq__`（以及 `__hash__`、`__match_args__` 等）：
+
+```python
+>>> p1 = Point(1.0, 2.0)
+>>> p2 = Point(1.0, 2.0)
+>>> p1                      # Point(x=1.0, y=2.0)——自动 __repr__
+>>> p1 == p2                # True——自动 __eq__（值相等，不是身份相等）
+>>> p1.x                    # 1.0
+```
+
+**注意：`@dataclass` 生成的 `__eq__` 是"值相等"而不是"身份相等"**——两个不同的实例，只要字段值相同就 `==`。这是和默认 object 行为（`is` 身份比较）的关键区别。
+
+---
+
+### 6.2 `field()` —— 精细控制字段
+
+#### `default` 与可变默认值的陷阱
+
+```python
+from dataclasses import dataclass, field
+
+# ❌ 错误——可变默认值：所有实例共享同一个 list！
+@dataclass
+class BadTeam:
+    members: list[str] = []
+
+# ✅ 正确——用 default_factory，每个实例创建自己的 list
+@dataclass
+class Team:
+    members: list[str] = field(default_factory=list)
+```
+
+这个陷阱和普通函数参数的 `def f(x=[])` 是同一个问题的 dataclass 版本：**默认值在类定义时只创建一次，所有实例共享同一个对象。** `default_factory` 告诉 dataclass"每次实例化时调用这个工厂函数来创建新的默认值"。
+
+```python
+>>> t1 = Team()
+>>> t2 = Team()
+>>> t1.members.append("Alice")
+>>> t1.members    # ['Alice']
+>>> t2.members    # []——独立！如果用了 [] 会变成 ['Alice']
+```
+
+**常见 `default_factory`：** `list`、`dict`、`set`、`lambda: 0.0`（要动态计算的默认值）。注意 `lambda` 可以作为工厂——比如默认值为当前时间 `field(default_factory=datetime.now)`。
+
+#### `field()` 的其他参数
+
+```python
+@dataclass
+class User:
+    name: str
+    age: int = field(compare=False)      # 不参与 __eq__ 比较
+    _cache: dict = field(default_factory=dict, repr=False)   # 不显示在 __repr__ 中
+```
+
+| 参数 | 作用 |
+|------|------|
+| `default` | 默认值——只允许不可变类型 |
+| `default_factory` | 默认值工厂函数——可变默认值用这个 |
+| `init` | `False` 时该字段不出现在 `__init__` 参数中 |
+| `repr` | `False` 时该字段不出现在 `__repr__` 中 |
+| `compare` | `False` 时该字段不参与 `__eq__`/`__lt__` 等比较 |
+
+---
+
+### 6.3 `frozen=True` —— 不可变数据类
+
+```python
+@dataclass(frozen=True)
+class Point:
+    x: float
+    y: float
+```
+
+```python
+>>> p = Point(1.0, 2.0)
+>>> p.x = 5.0    # dataclasses.FrozenInstanceError: cannot assign to field 'x'
+>>> hash(p)      # 可以 hash——frozen 数据类的 __hash__ 自动生成
+```
+
+`frozen=True` 的机制：dataclass 生成的 `__setattr__` 会拒绝任何赋值（在 `__init__` 完成后）。
+
+**`frozen=True` 的实际价值：**
+
+1. **可哈希**——frozen 实例自动获得 `__hash__`，可以作为 dict 的 key 或 set 的元素。
+2. **防意外修改**——数据在创建后不可变，符合"值对象（Value Object）"语义：坐标点、配置、事件记录这类"创建后就不该变"的数据。
+
+**常见误解——frozen 是"浅冻结"：**
+
+```python
+@dataclass(frozen=True)
+class FrozenTeam:
+    members: list[str]    # 字段本身是可变类型！
+
+>>> team = FrozenTeam(["Alice"])
+>>> team.members.append("Bob")    # 这不会报错！
+>>> team.members                  # ['Alice', 'Bob']——内部数据被改了
+```
+
+`frozen=True` 阻止的是"给字段重新赋值"（`team.members = [...]`），**不是"修改字段指向的可变对象"**。如果字段是 list/dict，它们的内容仍然可以变。真正的不可变需要字段本身也是不可变类型（tuple、frozenset、str、int 等）。
+
+---
+
+### 6.4 `slots=True` —— 内存优化
+
+```python
+@dataclass(slots=True)
+class Point:
+    x: float
+    y: float
+```
+
+`slots=True`（Python 3.10+）让 dataclass 使用 `__slots__` 而非 `__dict__` 存储实例属性：
+
+```python
+>>> p = Point(1.0, 2.0)
+>>> p.__dict__    # AttributeError——没有 __dict__
+```
+
+**`__slots__` 的机制**（Python 高级教程 1.6 节的展开）：普通实例用一个 dict（`__dict__`）存属性——灵活但每个实例都有 dict 的内存开销。`__slots__` 用**固定大小的 C 结构体**存属性——省内存，代价是不能动态添加新属性。
+
+```python
+>>> p = Point(1.0, 2.0)
+>>> p.z = 3.0    # AttributeError: 'Point' object has no attribute 'z'
+```
+
+**什么时候用：** 需要创建**大量实例**（百万级）且字段集合固定时——每个实例省一个 dict 的开销，内存差异巨大。普通业务代码不需要——可读性和灵活性比省那点内存重要。
+
+---
+
+### 6.5 dataclass 在数据模型三层划分中的位置
+
+回顾 1.1 Python高级里"数据模型的三层划分"：
+
+| 层级 | 工具 | 运行时校验 | 场景 |
+|------|------|-----------|------|
+| 定义数据结构 | **`dataclass`** | 否 | 程序内部自己构造 |
+| 运行时数据流转 | `TypedDict` | 否 | 模块间传递，彼此信任 |
+| 接口级数据流转 | `pydantic.BaseModel` | **是** | 外部输入（HTTP body、MQ、第三方 API） |
+
+`dataclass` 是三层中的第一层——**内部数据结构的标准写法**。它不校验类型（`Point("a", "b")` 不会报错，尽管标注了 `float`），它的价值是消除样板代码 + 类型标注给 IDE/静态检查器用。
+
+**关键边界：** 一旦数据来自外部输入（HTTP 请求体、消息队列、用户上传的文件），`dataclass` 不够——你需要 pydantic 的运行时校验。`dataclass` 的信任前提是"构造它的人就是你自己团队"。
+
+---
+
+### 6.6 总结
+
+| 知识点 | 一句话要点 |
+|--------|----------|
+| `@dataclass` | 自动生成 `__init__`/`__repr__`/`__eq__`——消除样板代码 |
+| `__eq__` 语义 | 值相等而非身份相等——两个实例字段相同就 `==` |
+| 可变默认值陷阱 | `field(default_factory=list)`——和函数默认参数同一个坑 |
+| `field()` | 精细控制：`compare`/`repr`/`init` 排除字段 |
+| `frozen=True` | 不可变 + 可哈希——但只是浅冻结，字段内容仍然可变 |
+| `slots=True` | 用 `__slots__` 存属性——百万级实例时省内存，代价是失去动态属性 |
+| 三层划分 | dataclass 是内部数据结构层——外部输入需要 pydantic 的运行时校验 |
+
+---
+
+## 七、设计原则
+
+### 7.1 SOLID——面向对象设计的五个原则
+
+SOLID 是五个设计原则的首字母缩写。它们不是法律条文，而是"当你犹豫怎么设计时，朝这个方向想"的指南。
+
+#### S —— Single Responsibility Principle（单一职责原则）
+
+> **一个类只应该有一个变化的原因。**
+
+反例：
+
+```python
+class Report:
+    def __init__(self, data: dict):
+        self.data = data
+
+    def calculate_statistics(self):    # 职责 1：计算统计
+        ...
+
+    def format_as_html(self):          # 职责 2：格式化成 HTML
+        ...
+
+    def save_to_database(self):        # 职责 3：存数据库
+        ...
+```
+
+这个类有三个变化原因：统计口径变了要改、HTML 样式变了要改、数据库 schema 变了也要改。任何一个改动都可能意外影响其他两个职责。
+
+正例：
+
+```python
+class Statistics:
+    def calculate(self, data: dict) -> dict:    # 只负责计算
+        ...
+
+class HTMLFormatter:
+    def format(self, stats: dict) -> str:       # 只负责格式化
+        ...
+
+class ReportRepository:
+    def save(self, report: str) -> None:        # 只负责持久化
+        ...
+```
+
+**判断标准：** 能否用一句话描述这个类的职责？如果描述里出现"和"字，很可能违反 SRP。
+
+#### O —— Open-Closed Principle（开放封闭原则）
+
+> **对扩展开放，对修改封闭。** 新增功能时，应该通过新增代码（扩展）实现，而不是修改已有代码。
+
+这是插件系统项目的核心原则（4.4 节已经见过）：
+
+```python
+# ❌ 违反 OCP——每加一种文件格式，就要改这个函数
+def process_file(path: str) -> str:
+    if path.endswith(".pdf"):
+        return process_pdf(path)
+    elif path.endswith(".docx"):
+        return process_docx(path)
+    elif path.endswith(".xlsx"):       # 每次加格式都改这里
+        return process_excel(path)
+    ...
+```
+
+```python
+# ✅ 符合 OCP——新格式只需要新加一个类，已有代码一行不改
+class Reader(ABC):
+    @abstractmethod
+    def read(self, path: str) -> str: ...
+
+class PDFReader(Reader):
+    def read(self, path): ...
+
+class DocxReader(Reader):
+    def read(self, path): ...
+
+class ExcelReader(Reader):     # 新增——扩展，不修改
+    def read(self, path): ...
+```
+
+**判断标准：** 新增一种场景，你是在加新类/新函数，还是在已有函数里加 `elif` 分支？前者是 OCP，后者不是。
+
+#### L —— Liskov Substitution Principle（里氏替换原则）
+
+> **子类必须能替换父类，而程序行为不改变。** 凡是父类能出现的地方，换成子类，调用方感知不到差异（除了行为的具体实现）。
+
+这是 SOLID 里最容易被违反也最隐蔽的一个。经典反例——矩形/正方形：
+
+```python
+class Rectangle:
+    def __init__(self, width: float, height: float):
+        self._width = width
+        self._height = height
+
+    def set_width(self, w: float):
+        self._width = w
+
+    def set_height(self, h: float):
+        self._height = h
+
+class Square(Rectangle):
+    def __init__(self, side: float):
+        super().__init__(side, side)
+
+    def set_width(self, w: float):
+        self._width = w
+        self._height = w      # 保证正方形——但破坏了矩形的独立设置语义
+
+    def set_height(self, h: float):
+        self._width = h       # 同上
+        self._height = h
+```
+
+问题：
+
+```python
+def scale(rect: Rectangle, factor: float):
+    rect.set_width(rect.width * factor)     # 调用方假设 width/height 独立
+
+>>> r = Rectangle(3, 4)
+>>> scale(r, 2)      # width=6, height=4——矩形行为正常
+>>> s = Square(3)
+>>> scale(s, 2)      # 期望：正方形放大。实际：width=6, height=3——不再是正方形！
+```
+
+`Square` 在数学上是 `Rectangle` 的特例，但**在可变对象的世界里它不是**——因为 `Rectangle` 的契约包含"width 和 height 可以独立修改"，而 `Square` 无法履行这个契约。调用 `scale` 的代码假设它拿到的是"真矩形"，换成 `Square` 后行为悄悄变了——这就是 LSP 违规。
+
+**Python 中的 LSP 信号：**
+
+- 子类覆盖方法时**收窄了参数范围**或**抛出不相关的异常**（父类方法明确不会抛的异常）
+- 子类的方法**不做事**（`pass`）或**抛 `NotImplementedError`**——说明这个方法对子类无意义，继承关系本身就错了
+- 子类改变了父类方法的**返回值语义**（比如父类返回非负数，子类可能返回负数）
+
+#### I —— Interface Segregation Principle（接口隔离原则）
+
+> **调用方不应该被迫依赖它不需要的接口。**
+
+Java 版本：一个大接口有 10 个方法，实现类只用 2 个，却被迫实现全部 10 个（用空实现或 `UnsupportedOperationException` 凑数）。解决方案是把大接口拆成多个小接口。
+
+Python 版本——用 ABC 表达：
+
+```python
+# ❌ 一个臃肿的 ABC——所有"机器"都必须实现全部方法
+class Machine(ABC):
+    @abstractmethod
+    def print_document(self): ...
+
+    @abstractmethod
+    def scan_document(self): ...
+
+    @abstractmethod
+    def fax_document(self): ...
+
+# 打印机被迫实现扫描和传真——空实现或抛错凑数
+class Printer(Machine):
+    def print_document(self):
+        ...
+    def scan_document(self):
+        raise NotImplementedError    # 打印机不会扫描——被迫实现无关方法
+    def fax_document(self):
+        raise NotImplementedError
+```
+
+```python
+# ✅ 拆成小接口——每个实现类只依赖它需要的
+class Printer(ABC):
+    @abstractmethod
+    def print_document(self): ...
+
+class Scanner(ABC):
+    @abstractmethod
+    def scan_document(self): ...
+
+class Fax(ABC):
+    @abstractmethod
+    def fax_document(self): ...
+
+class PrinterOnly(Printer):
+    def print_document(self): ...
+
+class AllInOne(Printer, Scanner, Fax):    # 全能机才实现全部
+    ...
+```
+
+**Python 的天然优势：** 鸭子类型让 Python 默认就接近 ISP——你不需要声明"实现哪个接口"，只实现你需要的方法。ISP 在 Python 中主要体现为：**ABC 要小而专注**——如果一个 ABC 有 10 个抽象方法而大多数实现类只用其中 3 个，这个 ABC 该拆了。
+
+#### D —— Dependency Inversion Principle（依赖倒置原则）
+
+> **高层模块不应该依赖低层模块，两者都应该依赖抽象；抽象不应该依赖细节，细节应该依赖抽象。**
+
+```python
+# ❌ 违反 DIP——ReportService 直接依赖具体的 MySQL 实现
+class MySQLRepository:
+    def save(self, report: str):
+        ...    # 直接写 MySQL
+
+class ReportService:
+    def __init__(self):
+        self._repo = MySQLRepository()    # 硬编码依赖具体类
+
+# ❌ 换数据库 = 改 ReportService = 违反 DIP
+```
+
+```python
+# ✅ 符合 DIP——依赖抽象接口
+class ReportRepository(ABC):              # 抽象
+    @abstractmethod
+    def save(self, report: str) -> None: ...
+
+class MySQLRepository(ReportRepository):  # 细节依赖抽象
+    def save(self, report: str):
+        ...
+
+class S3Repository(ReportRepository):     # 换存储 = 新增类，不改服务
+    def save(self, report: str):
+        ...
+
+class ReportService:
+    def __init__(self, repo: ReportRepository):    # 依赖注入——传接口
+        self._repo = repo
+
+    def create_report(self, data: dict):
+        ...
+        self._repo.save(...)               # 只依赖 save 接口
+```
+
+`ReportService` 只依赖 `ReportRepository` 这个抽象——用 MySQL、S3、本地文件都行，服务代码一行不改。**依赖注入（构造函数传入依赖）是 DIP 的落地方式。**
+
+DIP 和六边形架构的关系：学习目标里讲的"Port/Adapter"——Port 就是抽象接口，Adapter 就是具体实现。DIP 是那个架构的底层原则。
+
+#### SOLID 速查
+
+| 原则 | 一句话 |
+|------|--------|
+| S 单一职责 | 一个类只有一个变化原因——描述里出现"和"字要警惕 |
+| O 开放封闭 | 新功能靠新增代码（新类），不靠修改已有代码（加 elif） |
+| L 里氏替换 | 子类能无缝替换父类——子类"不做事"或"抛异常"的方法说明继承错了 |
+| I 接口隔离 | ABC 小而专注——调用方不被迫实现用不到的方法 |
+| D 依赖倒置 | 依赖抽象（ABC）不依赖具体——依赖注入落地 |
+
+---
+
+### 7.2 Composition > Inheritance（组合优于继承）
+
+> 这个原则的完整表述是：**能用组合（has-a）解决的问题，不要用继承（is-a）解决。** 它不是"禁止继承"，而是"继承是最后的手段"。
+
+#### 为什么继承是危险的
+
+继承在三种情况下会伤害你：
+
+1. **继承打破了封装。** 子类能看到（并依赖）父类的内部实现——父类改一个"内部"属性，所有子类可能都崩。而组合通过接口交互，内部实现完全隔离。
+2. **继承是静态的、编译期（定义期）决定的。** `Dog` 永远是 `Animal`，不能运行时改变。而组合的对象可以在运行时替换（把 `Engine` 换成 `ElectricEngine`）。
+3. **深层继承链难以理解。** `Animal → Mammal → Canine → Dog → Labrador`——任何一个类的行为都散落在五层里，读代码要爬五层才能理解一个方法。
+
+#### 组合的两种落地模式
+
+**（a）直接组合——把对象存为属性：**
+
+```python
+class Engine:
+    def start(self):
+        return "engine started"
+
+class Car:
+    def __init__(self, engine: Engine):    # Car 有一个 Engine——has-a
+        self._engine = engine
+
+    def start(self):
+        return self._engine.start()         # 委托——把工作交给 Engine
+
+# 换引擎类型——运行时替换，Car 类不用改
+>>> car = Car(ElectricEngine())
+>>> car.start()
+```
+
+**（b）Mixin 组合——用多继承实现行为复用：**
+
+```python
+class JSONSerializable:
+    def to_json(self) -> str:
+        import json
+        return json.dumps(self.__dict__)
+
+class User(JSONSerializable):       # User 有一个"能 JSON 化"的能力
+    def __init__(self, name: str):
+        self.name = name
+
+>>> User("Alice").to_json()     # '{"name": "Alice"}'
+```
+
+Mixin 是 Python 对"组合优于继承"的独特答案——它是**受限的继承**：Mixin 类不承载"是什么"的语义（`User` 不是 `JSONSerializable` 的一种），只注入"有什么能力"。规范：
+
+- Mixin 类名以 `Mixin` 或 `-able` 结尾（`JSONSerializable`、`LoggingMixin`）
+- Mixin 不定义 `__init__`（除非是协作式多继承的 `**kwargs` 模式）
+- 每个 Mixin 只提供一个能力——小而专注（呼应 ISP）
+
+#### 何时用继承，何时用组合
+
+| 关系 | 用 | 例子 |
+|------|-----|------|
+| is-a——真正的"是一种" | 继承 | `Dog` is `Animal` |
+| has-a——"有一个" | 组合 | `Car` has `Engine` |
+| 需要复用**大部分**父类行为，只改一小部分 | 继承 | 框架基类、Template Method |
+| 需要复用**少量**能力，其余无关 | Mixin 或组合 | 日志、序列化、缓存 |
+| 不确定 | **组合** | 组合更容易重构 |
+
+**经验法则：先写组合。** 组合写起来略啰嗦（要写委托方法），但重构代价低、耦合小。继承写起来省事，但改起来贵。默认组合，明确是 is-a 时才继承。
+
+---
+
+### 7.3 总结
+
+| 知识点 | 一句话要点 |
+|--------|----------|
+| S 单一职责 | 一个类只有一个变化原因——职责描述里有"和"要警惕 |
+| O 开放封闭 | 新增功能靠新增类（扩展），不靠改已有代码（加分支） |
+| L 里氏替换 | 子类必须能无缝替换父类——`Square` 继承 `Rectangle` 的经典反例 |
+| I 接口隔离 | ABC 小而专注——实现类不被迫实现无关方法 |
+| D 依赖倒置 | 依赖抽象不依赖具体——构造函数注入（依赖注入）落地 |
+| Composition > Inheritance | 继承打破封装、静态绑定、链深难懂；组合隔离、可替换、易重构 |
+| Mixin | Python 的受限继承——注入"能力"不承载"是什么"语义 |
+| 默认选择 | 不确定就用组合——继承留给明确的 is-a 关系 |
