@@ -2791,3 +2791,120 @@ collection_lib/
 
 **Stack 在 Linked List 之后做？** 是的——Linked List 让你从零感受"数据结构是内存里怎么组织数据"，做完它再回到 Stack/Queue，你对"用 list 的 append 为什么是 O(1)"会有更深的理解。LRU Cache 放最后是因为它实际上是"双向链表 + dict"的组合，必须先有链表的基础。
 | `__getattribute__` | `obj.xxx`（每次） | 拦截一切——内部访问自己的属性必须用 `super()` |
+
+
+```Python
+from abc import ABC, abstractmethod
+from contextlib import contextmanager
+import sqlite3
+from typing import Optional
+
+# ==========================================
+# 1. Application 层：定义 Port (接口) & Runtime
+# ==========================================
+
+
+# 端口 (Port)：应用层声明自己需要什么能力，但不关心谁来实现
+class UserRepository(ABC):
+
+  @abstractmethod
+  def get_user_name(self, user_id: int) -> Optional[str]:
+    pass
+
+
+# 运行时容器：只持有抽象接口
+class Runtime:
+
+  def __init__(self):
+    self.user_repo: Optional[UserRepository] = None  # 挂载的是接口类型
+
+
+# ==========================================
+# 2. Infrastructure 层：实现 Adapters (适配器)
+# ==========================================
+
+
+# 适配器 A：SQLite 实现
+class SqliteUserRepository(UserRepository):
+
+  def __init__(self, conn: sqlite3.Connection):
+    self.conn = conn
+
+  def get_user_name(self, user_id: int) -> Optional[str]:
+    cursor = self.conn.cursor()
+    cursor.execute("SELECT name FROM users WHERE id = ?", (user_id,))
+    row = cursor.fetchone()
+    return row[0] if row else None
+
+
+# 适配器 B：Postgres 实现
+class PostgresUserRepository(UserRepository):
+
+  def __init__(self, dsn: str):
+    self.dsn = dsn
+    print(f"  [Postgres] 连接到 {dsn}...")
+
+  def get_user_name(self, user_id: int) -> Optional[str]:
+    print("  [Postgres] 执行 SQL: SELECT name FROM users...")
+    return "Bob"  # 模拟从 Postgres 查出的数据
+
+  def close(self):
+    print("  [Postgres] 关闭连接 pool...")
+
+
+# ==========================================
+# 3. 上下文管理器：组装厂 (DI Container)
+# ==========================================
+@contextmanager
+def app_lifespan(runtime: Runtime, db_type: str = "sqlite"):
+  print(f"\n[启动] 初始化基础设施，驱动类型: {db_type}")
+
+  if db_type == "sqlite":
+    conn = sqlite3.connect(":memory:")
+    conn.execute("CREATE TABLE users (id INT, name TEXT)")
+    conn.execute("INSERT INTO users VALUES (1, 'Alice')")
+    conn.commit()
+
+    # 实例化适配器并挂载到 Runtime
+    runtime.user_repo = SqliteUserRepository(conn)
+
+  elif db_type == "postgres":
+    pg_repo = PostgresUserRepository("postgresql://user:pass@localhost/db")
+    runtime.user_repo = pg_repo
+
+  try:
+    yield runtime
+  finally:
+    print(f"[关闭] 清理 {db_type} 资源...")
+    # 如果适配器有资源清理逻辑，在这里处理
+    if db_type == "sqlite":
+      conn.close()
+    elif db_type == "postgres":
+      pg_repo.close()
+
+
+# ==========================================
+# 4. 业务代码 (Application Service)
+# ==========================================
+def fetch_user_service(runtime: Runtime, user_id: int) -> Optional[str]:
+  # 纯粹的依赖倒置：业务逻辑只面向 Port (UserRepository) 编程，没有一行 if-else
+  return runtime.user_repo.get_user_name(user_id)
+
+
+# ==========================================
+# 5. 运行测试
+# ==========================================
+if __name__ == "__main__":
+  runtime = Runtime()
+
+  # 场景 A: 使用 SQLite 驱动
+  with app_lifespan(runtime, db_type="sqlite"):
+    name = fetch_user_service(runtime, user_id=1)
+    print(f"-> 业务层获取到用户: {name}")
+
+  # 场景 B: 无缝切换到 Postgres 驱动
+  with app_lifespan(runtime, db_type="postgres"):
+    # 业务代码 fetch_user_service 内部完全不用改，运行流畅
+    name = fetch_user_service(runtime, user_id=1)
+    print(f"-> 业务层获取到用户: {name}")
+```

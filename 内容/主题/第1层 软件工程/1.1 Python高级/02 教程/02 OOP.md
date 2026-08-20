@@ -1906,3 +1906,350 @@ Mixin 是 Python 对"组合优于继承"的独特答案——它是**受限的�
 | Composition > Inheritance | 继承打破封装、静态绑定、链深难懂；组合隔离、可替换、易重构 |
 | Mixin | Python 的受限继承——注入"能力"不承载"是什么"语义 |
 | 默认选择 | 不确定就用组合——继承留给明确的 is-a 关系 |
+
+---
+
+## 八、Project 2：插件系统（Plugin System）
+
+### 8.1 项目是什么
+
+实现一个**文档抽取器（Document Extractor）**：接收任意格式的文档文件（PDF、DOCX、Excel……），统一抽取为 `Document` 对象。
+
+这个项目要练的不是"解析文档"——那有现成的库（pypdf、python-docx、openpyxl）。要练的是**插件架构**：如何设计一个系统，让"新增一种格式支持"变成"新增一个插件文件"，主程序一行代码都不用改。
+
+这正是学习目标中说的——**插件系统就是六边形架构（Ports & Adapters）的落地**：
+
+| 六边形架构的概念 | 本项目中的对应物 |
+|-----------------|-----------------|
+| Port（端口——业务要什么） | `DocumentReader` ABC——统一的 `read(stream) -> Document` 接口 |
+| Adapter（适配器——具体怎么做） | `plugins/` 下的 `PDFReader`、`DocxReader`、`ExcelReader` |
+| 核心不依赖细节 | `core/` 只认识 `DocumentReader`，从不 import 具体插件 |
+| 资源管控归主程序 | `Extractor` 管文件句柄、超时、并发、异常兜底 |
+
+这套 Port/Adapter 思路在后端工程里无处不在——存储后端可以换（本地磁盘/S3/OSS）、消息队列可以换（Kafka/RabbitMQ）、认证方式可以换（JWT/OAuth/Session）。把这个模式吃透，对后续的 Backend Engineering 是直接可复用的底层认知，而不是孤立的语法练习。
+
+### 8.2 需求总览
+
+**核心功能（对应学习目标的四个要求）：**
+
+| # | 要求 | 说明 |
+|---|------|------|
+| 1 | 基类 | `DocumentReader(ABC)`——所有插件的统一抽象接口 |
+| 2 | 插件注册 | 插件类被定义时自动注册到注册表（扩展名 → 类） |
+| 3 | 动态加载 | `load_plugins()` 扫描插件目录、用 `importlib` 导入——主程序不 import 任何具体插件 |
+| 4 | 多态调用 | `extractor.extract(path)` 按扩展名路由到对应插件，通过统一接口调用 |
+
+**资源管控（学习目标明确要求——归主程序，不归插件）：**
+
+| # | 要求 | 说明 |
+|---|------|------|
+| 5 | 文件句柄归主程序 | `Extractor` 负责打开/关闭文件；插件只接收已打开的文件流，**不得自己 open/close** |
+| 6 | 超时控制 | `Extractor(timeout=...)`——插件超时抛 `ExtractTimeoutError`，不无限等待 |
+| 7 | 并发数量限制 | `Extractor(max_concurrency=...)`——同时执行的解析数有上限 |
+| 8 | 异常兜底 | 插件抛的任何异常都被主程序包成统一的 `ExtractError`，不向调用方泄漏 |
+
+**周边：**
+
+- `Document` 数据类（用第六节的 dataclass）
+- 三种插件：PDF / DOCX / Excel
+- 命令行入口：`python -m doc_extractor <path>`
+- 测试、样例文件、README
+
+### 8.3 架构设计
+
+```
+                    调用方
+                      │ extract(path)
+                      ▼
+            ┌─────────────────────────┐
+            │       Extractor         │  主程序——资源管控层
+            │  ├ 文件句柄（open/close） │
+            │  ├ 超时、并发上限         │
+            │  └ 异常兜底（→ExtractError）│
+            └───────────┬─────────────┘
+                        │ 只依赖 DocumentReader（Port）
+                        │ 按 path.suffix 查注册表
+        ┌───────────────┼───────────────┐
+        ▼               ▼               ▼
+  ┌──────────┐   ┌──────────┐   ┌──────────┐
+  │PDFReader │   │DocxReader│   │ExcelReader│  plugins/——Adapter 层
+  │(.pdf)    │   │(.docx)   │   │(.xlsx)   │  只做"怎么解析"
+  └──────────┘   └──────────┘   └──────────┘
+```
+
+**依赖方向是关键：** `core/` 不 import 任何插件；插件 import `core/`（继承 ABC、触发注册）。依赖永远指向核心——这就是六边形架构中"核心不依赖细节，细节依赖核心"。
+
+### 8.4 接口契约
+
+以下签名是**必须严格遵守的契约**——实现时不允许偏离。
+
+#### `Document`——统一输出类型
+
+```python
+# core/document.py
+from dataclasses import dataclass, field
+
+@dataclass(frozen=True)
+class Document:
+    """抽取结果——所有插件统一输出这个类型。"""
+    text: str
+    metadata: dict[str, str] = field(default_factory=dict)
+    # frozen：Document 是值对象——创建后不该变
+    # 注意浅冻结：metadata 的内容仍可变（6.3 节讲过），但字段不可重新赋值
+```
+
+#### 异常层级——两层设计
+
+```python
+# core/exceptions.py
+class ExtractError(Exception):
+    """主程序的统一错误——extract() 的任何失败最终都是它（或其子类）。"""
+
+    def __init__(self, path, fmt: str, cause: Exception | None = None):
+        self.path = path
+        self.fmt = fmt
+        self.cause = cause          # 原始异常——保留完整 cause 链
+        msg = f"extract failed: {path} ({fmt})"
+        super().__init__(msg if cause is None else f"{msg} -> {cause}")
+
+class UnsupportedFormatError(ExtractError):
+    """没有插件支持该扩展名——错误信息必须列出已支持的格式。"""
+
+class ExtractTimeoutError(ExtractError):
+    """插件执行超时。"""
+
+class DocumentReaderError(Exception):
+    """插件内部解析失败时抛出——这是插件作者报告自己错误的方式。"""
+```
+
+**分层的意义：** 插件抛 `DocumentReaderError`（插件作者的语言）→ 主程序包成 `ExtractError`（调用方的语言）。调用方只需要 catch 一个 `ExtractError`，不需要知道 PDF 插件内部会抛什么。
+
+#### `DocumentReader`——Port（基类）
+
+```python
+# core/reader.py
+from abc import ABC, abstractmethod
+from typing import BinaryIO
+
+from .document import Document
+from .registry import Registry
+
+class DocumentReader(ABC):
+    """Port——所有插件必须继承这个抽象基类。
+
+    插件作者要做的全部事情：
+    1. 继承 DocumentReader
+    2. 声明 extensions（支持的扩展名）
+    3. 实现 read()
+    ——注册自动发生（见 __init_subclass__）。
+    """
+
+    extensions: tuple[str, ...] = ()
+    """支持的扩展名，如 (".pdf",)。"""
+
+    def __init_subclass__(cls, **kwargs):
+        """类定义完成时自动注册（3.5 节的模式）。"""
+        super().__init_subclass__(**kwargs)
+        if not cls.__abstractmethods__:
+            Registry.register(cls)    # 只有具体类才注册——中间抽象类跳过
+
+    @abstractmethod
+    def read(self, stream: BinaryIO) -> Document:
+        """从已打开的文件流解析出 Document。
+
+        契约（必须遵守）：
+        - stream 由主程序打开并负责关闭——插件【不得】关闭它
+        - 解析失败时抛 DocumentReaderError（其他异常主程序也会兜底）
+        - 实现必须无状态——read() 不得依赖或修改实例状态
+        """
+        ...
+```
+
+#### `Registry`——注册表
+
+```python
+# core/registry.py
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:                      # 只给类型检查器用——避免循环 import
+    from .reader import DocumentReader
+
+class Registry:
+    """扩展名 → 插件类的映射。"""
+
+    _readers: dict[str, "type[DocumentReader]"] = {}
+
+    @classmethod
+    def register(cls, reader_cls: "type[DocumentReader]") -> None:
+        """注册插件类。重复扩展名立即报错——fail fast。"""
+        if not reader_cls.extensions:
+            raise ValueError(f"{reader_cls.__name__} must declare extensions")
+        for ext in reader_cls.extensions:
+            if not (isinstance(ext, str) and ext.startswith(".")):
+                raise ValueError(f"invalid extension {ext!r}: must be str starting with '.'")
+            if ext in cls._readers:
+                raise ValueError(
+                    f"extension {ext!r} already registered by {cls._readers[ext].__name__}"
+                )
+            cls._readers[ext] = reader_cls
+
+    @classmethod
+    def get(cls, extension: str) -> "type[DocumentReader] | None":
+        """按扩展名查插件——没有返回 None。"""
+        return cls._readers.get(extension)
+
+    @classmethod
+    def supported_formats(cls) -> list[str]:
+        """已注册的全部扩展名——给错误信息用。"""
+        return sorted(cls._readers)
+
+    @classmethod
+    def clear(cls) -> None:
+        """清空注册表——测试用（每个测试重新开始）。"""
+        cls._readers.clear()
+```
+
+#### `Extractor`——主程序（资源管控 + 多态调用）
+
+```python
+# core/extractor.py
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeout
+from pathlib import Path
+
+from .document import Document
+from .exceptions import ExtractError, ExtractTimeoutError, UnsupportedFormatError
+from .registry import Registry
+
+class Extractor:
+    """主程序——资源管控层。管：文件句柄、超时、并发上限、异常兜底。
+    不管：怎么解析（那是插件的事）。"""
+
+    def __init__(self, timeout: float = 30.0, max_concurrency: int = 4):
+        self._timeout = timeout
+        # ThreadPoolExecutor 一石二鸟：
+        # max_workers 限制并发数；future.result(timeout) 实现超时
+        self._executor = ThreadPoolExecutor(max_workers=max_concurrency)
+
+    def extract(self, path: Path | str) -> Document:
+        path = Path(path)
+        reader_cls = Registry.get(path.suffix)
+        if reader_cls is None:
+            raise UnsupportedFormatError(path, path.suffix)
+        future = self._executor.submit(self._run, reader_cls(), path)
+        try:
+            return future.result(timeout=self._timeout)
+        except FutureTimeout:
+            raise ExtractTimeoutError(path, path.suffix) from None
+
+    def _run(self, reader, path: Path) -> Document:
+        """在线程池中执行：打开文件 → 多态调用 → 异常兜底。"""
+        try:
+            with open(path, "rb") as stream:      # 文件句柄——主程序管
+                return reader.read(stream)        # 多态调用——只认 ABC 接口
+        except Exception as e:
+            raise ExtractError(path, path.suffix, e) from e
+```
+
+**注意超时的一个诚实的细节：** Python 线程无法被强杀——超时只是"调用方不等了"，线程池里的任务还会继续跑完，文件在任务结束时正常关闭。超时保护的是**调用方**不被无限阻塞，不是取消底层工作。
+
+### 8.5 关键设计决策
+
+#### 决策 1：注册机制用 `__init_subclass__` 而不是装饰器
+
+| | `__init_subclass__`（本项目采用） | 装饰器 `@register` |
+|---|---|---|
+| 注册时机 | 类定义完成时自动 | 装饰器显式调用 |
+| 忘记注册的风险 | **无** | 有——忘了加装饰器，插件静默失效 |
+| 新增插件的样板代码 | 零 | 每个类多一行 |
+| 灵活性 | 继承即注册，耦合在基类上 | 可以注册非子类（如第三方类） |
+
+选择自动注册的理由：**"插件存在但不生效"是插件系统最危险的事故**——它静默失败，要等到某个文件抽取不出来才发现。`__init_subclass__` 从机制上消灭了"忘记注册"这类错误。这是 3.5 节学过的模式在本项目中的实战应用。
+
+#### 决策 2：`read(stream: BinaryIO)` 而不是 `read(path)`
+
+资源边界表达在类型签名上。`BinaryIO` 的意思是"**已经打开**的文件对象"——插件物理上拿不到打开文件的资格，只有解析的资格。如果传 path，插件就得自己 open——句柄泄漏、忘记 close、路径校验的责任全都下放到每个插件重复实现。主程序统一管资源，插件只管解析——这就是"资源管控归主程序"的落地方式。
+
+#### 决策 3：错误分两层（`DocumentReaderError` → `ExtractError`）
+
+插件抛自己的错误（插件作者的语言），主程序统一包装（调用方的语言）。调用方只需 `except ExtractError` 一个分支——不管未来增加多少插件、插件内部怎么失败，调用方的错误处理代码永远不变。这是"异常兜底"的实现方式，也是 OCP（开放封闭）在错误处理上的体现。
+
+#### 决策 4：`extract_many` 不能复用 `extract()`——线程池嵌套死锁
+
+如果要实现批量抽取 `extract_many(paths)`，**不能**写成：
+
+```python
+# ❌ 死锁陷阱！
+def extract_many(self, paths):
+    return [self.extract(p) for p in paths]
+# 用 ThreadPoolExecutor 并发版本时：extract 提交的嵌套任务在等待池中
+# 的空闲 worker，而所有 worker 都在等 extract 返回——互相等待，死锁
+```
+
+正确做法：`extract_many` 直接 submit 底层任务 `self._run(...)`，不要经过 `extract()`。这是线程池编程的经典陷阱——嵌套提交到同一个池。
+
+### 8.6 项目结构
+
+项目放在 `示例代码/plugin_system/`，与 `collection_lib/` 并列：
+
+```
+plugin_system/
+├── pyproject.toml
+├── README.md
+├── src/
+│   └── doc_extractor/
+│       ├── __init__.py
+│       ├── __main__.py            # CLI 入口——python -m doc_extractor <path>
+│       ├── core/                  # 核心——不依赖任何具体插件
+│       │   ├── __init__.py
+│       │   ├── document.py        # Document 数据类
+│       │   ├── exceptions.py      # 两层异常体系
+│       │   ├── reader.py          # DocumentReader ABC + 自动注册
+│       │   ├── registry.py        # 扩展名 → 类 注册表
+│       │   ├── loader.py          # importlib 动态加载
+│       │   └── extractor.py       # 主程序——资源管控 + 分发
+│       └── plugins/               # 插件目录——新增格式只改这里
+│           ├── __init__.py
+│           ├── pdf_reader.py
+│           ├── docx_reader.py
+│           └── excel_reader.py
+├── samples/                       # 样例文件（.pdf/.docx/.xlsx 各一个）
+└── tests/
+    ├── test_document.py
+    ├── test_registry.py
+    ├── test_loader.py
+    ├── test_extractor.py
+    └── test_plugins.py
+```
+
+依赖（pyproject.toml）：`pypdf`、`python-docx`、`openpyxl`（解析用）；dev 依赖加 `pytest`、`reportlab`（生成 PDF 样例用）。
+
+### 8.7 验收标准（毕业标准）
+
+逐条自测，全部通过才算完成：
+
+1. **零修改扩展**：新增一种格式支持 = 在 `plugins/` 下新增一个文件，`core/` 和 CLI 零修改。实际演示一次（例如新增 `MarkdownReader`）来证明。
+2. **三种格式可用**：`.pdf`、`.docx`、`.xlsx` 各能正确抽取文本内容。
+3. **不支持格式有结构化错误**：`UnsupportedFormatError`，错误信息包含该扩展名和已支持的格式列表。
+4. **文件句柄契约**：代码评审确认——所有插件代码中没有任何 `open()`/`close()` 调用。
+5. **超时生效**：写一个 `sleep` 的慢插件，`Extractor(timeout=0.1)` 调用它 → 收到 `ExtractTimeoutError`，不无限等待。
+6. **并发限制生效**：`max_concurrency=1` 时，同时只有一个 `read()` 在执行（测试用计数器验证）。
+7. **异常兜底**：插件抛任意异常（包括非 `DocumentReaderError` 的），调用方收到的都是 `ExtractError`，且 `cause` 链完整可追溯。
+8. **坏插件容错**：`plugins/` 里放一个 import 会失败的模块，`load_plugins()` 不中断，其余插件正常工作。
+9. **重复注册 fail fast**：两个插件声明同一个扩展名 → 导入时报 `ValueError`。
+10. **测试通过**：核心路径（注册、加载、分发、超时、兜底）有测试覆盖。
+11. **CLI 可运行**：`python -m doc_extractor samples/sample.pdf` 输出抽取的文本。
+
+### 8.8 分步实施指南
+
+| 步骤 | 内容 | 用到的教程章节 |
+|------|------|---------------|
+| 1 | 项目骨架：`pyproject.toml` + src 布局 | 参照 collection_lib |
+| 2 | `Document` 数据类 + `test_document.py` | 六、数据类 |
+| 3 | `DocumentReader` ABC + `Registry` + 自动注册 + `test_registry.py` | 五、抽象；3.5 `__init_subclass__` |
+| 4 | 三个插件 + `test_plugins.py` | 四、多态；二、封装 |
+| 5 | `loader.py` 动态加载 + `test_loader.py` | 8.5 决策 4 |
+| 6 | `Extractor` 资源管控 + `test_extractor.py` | 8.4 契约 |
+| 7 | CLI + samples + README | — |
+| 8 | 按 8.7 验收标准逐条自测 | — |
+
+**建议实现顺序：** 先跑通"一个插件、无动态加载、无超时"的最小闭环（步骤 2-4 + 简化版 Extractor），再逐步加 loader 和资源管控。每步都有对应测试，测试先行能让你每一步都确信自己没把之前的搞坏。
