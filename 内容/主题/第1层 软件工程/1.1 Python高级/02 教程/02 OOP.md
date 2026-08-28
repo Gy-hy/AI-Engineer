@@ -1993,7 +1993,12 @@ from dataclasses import dataclass, field
 class Document:
     """抽取结果——所有插件统一输出这个类型。"""
     text: str
-    metadata: dict[str, str] = field(default_factory=dict)
+    metadata: dict[str, str] = field(default_factory=dict, compare=False)
+    # compare=False 的原因：frozen=True 自动生成的 __hash__ 会对所有参与
+    # 相等比较的字段求 hash——而 dict 不可哈希，不排除 metadata 的话
+    # hash(doc) 会抛 TypeError。排除后：Document 的"值"由 text 决定，
+    # metadata 是辅助信息（页码、作者等），不参与相等判断。
+    #
     # frozen：Document 是值对象——创建后不该变
     # 注意浅冻结：metadata 的内容仍可变（6.3 节讲过），但字段不可重新赋值
 ```
@@ -2050,8 +2055,27 @@ class DocumentReader(ABC):
     def __init_subclass__(cls, **kwargs):
         """类定义完成时自动注册（3.5 节的模式）。"""
         super().__init_subclass__(**kwargs)
-        if not cls.__abstractmethods__:
+        if not cls._remaining_abstract_methods():
             Registry.register(cls)    # 只有具体类才注册——中间抽象类跳过
+
+    @classmethod
+    def _remaining_abstract_methods(cls) -> set[str]:
+        """cls 创建完成后还会剩下哪些抽象方法？
+
+        不能直接读 cls.__abstractmethods__，理由见下方"陷阱"说明。
+        按 ABCMeta 自己的算法提前算一遍：
+        1. 本类新声明的抽象方法；
+        2. 父类未实现的抽象方法中，本类没有覆盖成具体实现的。
+        """
+        abstract = {
+            name for name, value in vars(cls).items()
+            if getattr(value, "__isabstractmethod__", False)
+        }
+        for base in cls.__bases__:
+            for name in getattr(base, "__abstractmethods__", frozenset()):
+                if getattr(getattr(cls, name, None), "__isabstractmethod__", False):
+                    abstract.add(name)
+        return abstract
 
     @abstractmethod
     def read(self, stream: BinaryIO) -> Document:
@@ -2064,6 +2088,17 @@ class DocumentReader(ABC):
         """
         ...
 ```
+
+> **⚠️ 陷阱：`cls.__abstractmethods__` 在 `__init_subclass__` 里必然 AttributeError——不是代码问题，是 CPython 的刻意设计。**
+>
+> 天经地义的写法 `if not cls.__abstractmethods__:` 在这里会炸，两个事实叠加：
+>
+> 1. **时机**：`__init_subclass__` 在 `type.__new__` 内部执行，而 ABCMeta 要等它返回之后，才把 `__abstractmethods__` 写进新类自己的 `__dict__`——那一刻属性还不存在。
+> 2. **特殊查找规则（bpo-10006）**：CPython 对这个名字的类属性查找不走 MRO——只在类自己的 `__dict__` 里找，找不到就直接抛 AttributeError。原因是 `type` 元类身上带有一个同名描述符，如果允许沿 MRO 查找，所有类都会继承到它。后果：普通类属性（比如 `x`）在那一刻能正常沿 MRO 找到父类的值，唯独 `__abstractmethods__` 不行。
+>
+> 动手验证：在任何 ABC 的 `__init_subclass__` 里 `print(cls.__abstractmethods__)`，再定义一个具体子类——子类的定义语句本身就会抛 AttributeError（哪怕父类明确有这个属性，实验里 `parent.__abstractmethods__` 一切正常）。
+>
+> 两个看似能用的绕法都要警惕：`getattr(cls, "__abstractmethods__", frozenset())` 会静默拿到默认值——**中间抽象类也被注册**，fail-open 比崩溃更糟（静默错误）；`inspect.isabstract(cls)` 在新版 CPython 被专门修复过（实测 3.12 正确），但本项目手写算法，把机制摊开在明面上。
 
 #### `Registry`——注册表
 

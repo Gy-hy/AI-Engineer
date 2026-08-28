@@ -1,0 +1,1 @@
+"""core——主程序层。只认识 DocumentReader（Port），从不 import 具体插件。"""
