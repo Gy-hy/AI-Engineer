@@ -22,6 +22,7 @@ from doc_extractor import Registry
 from doc_extractor.core.exceptions import DocumentReaderError
 from doc_extractor.plugins.docx_reader import DocxReader
 from doc_extractor.plugins.excel_reader import ExcelReader
+from doc_extractor.plugins.markdown_reader import MarkdownReader
 from doc_extractor.plugins.pdf_reader import PdfReader
 
 
@@ -63,11 +64,19 @@ def _make_xlsx() -> io.BytesIO:
     return buf
 
 
-# 每个用例对三个插件跑一遍（DRY：不写 3 份几乎相同的测试）
+def _make_md() -> io.BytesIO:
+    """生成一个 Markdown 文档（纯文本，无编码要求）。"""
+    return io.BytesIO(b"# hello md\n\nsome content")
+
+
+# 每个用例对全部插件跑一遍（DRY：不写 N 份几乎相同的测试）。
+# MarkdownReader 也在列——它就是验收标准 1"零修改扩展"的演示插件，
+# 与其余三个走完全相同的测试，证明"新增格式"没有特殊待遇。
 PLUGIN_CASES = [
     pytest.param(PdfReader, ".pdf", _make_pdf, "hello pdf", id="pdf"),
     pytest.param(DocxReader, ".docx", _make_docx, "hello docx", id="docx"),
     pytest.param(ExcelReader, ".xlsx", _make_xlsx, "alice", id="xlsx"),
+    pytest.param(MarkdownReader, ".md", _make_md, "hello md", id="md"),
 ]
 
 
@@ -111,7 +120,11 @@ class TestPlugins:
         "reader_cls", [PdfReader, DocxReader, ExcelReader], ids=["pdf", "docx", "xlsx"]
     )
     def test_bad_file_raises_document_reader_error(self, reader_cls):
-        """坏文件：插件把库的原始异常包装成 DocumentReaderError（验收标准 7 的前半段）。"""
+        """坏文件：插件把库的原始异常包装成 DocumentReaderError（验收标准 7 的前半段）。
+
+        注意 MarkdownReader 不在参数列——纯文本格式任何字节都能解码，
+        不存在"坏文件"；这也提醒我们：契约的适用范围因格式而异。
+        """
         with pytest.raises(DocumentReaderError):
             reader_cls().read(io.BytesIO(b"this is not a real document"))
 

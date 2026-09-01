@@ -2282,8 +2282,8 @@ plugin_system/
 | 2 | `Document` 数据类 + `test_document.py` | 六、数据类 |
 | 3 | `DocumentReader` ABC + `Registry` + 自动注册 + `test_registry.py` | 五、抽象；3.5 `__init_subclass__` |
 | 4 | 三个插件 + `test_plugins.py` | 四、多态；二、封装 |
-| 5 | `loader.py` 动态加载 + `test_loader.py` | 8.5 决策 4 |
-| 6 | `Extractor` 资源管控 + `test_extractor.py` | 8.4 契约 |
+| 5 | `loader.py` 动态加载 + `test_loader.py` | 8.7 验收 8；7.1 DIP |
+| 6 | `Extractor` 资源管控 + `test_extractor.py` | 8.4 契约；8.5 决策 4 |
 | 7 | CLI + samples + README | — |
 | 8 | 按 8.7 验收标准逐条自测 | — |
 
