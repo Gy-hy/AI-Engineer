@@ -2208,19 +2208,20 @@ class Extractor:
 
 插件抛自己的错误（插件作者的语言），主程序统一包装（调用方的语言）。调用方只需 `except ExtractError` 一个分支——不管未来增加多少插件、插件内部怎么失败，调用方的错误处理代码永远不变。这是"异常兜底"的实现方式，也是 OCP（开放封闭）在错误处理上的体现。
 
-#### 决策 4：`extract_many` 不能复用 `extract()`——线程池嵌套死锁
+#### 决策 4：`extract_many` 不能复用 `extract()`——提交与等待必须分离
 
 如果要实现批量抽取 `extract_many(paths)`，**不能**写成：
 
 ```python
-# ❌ 死锁陷阱！
+# ❌ 零并发陷阱！
 def extract_many(self, paths):
     return [self.extract(p) for p in paths]
-# 用 ThreadPoolExecutor 并发版本时：extract 提交的嵌套任务在等待池中
-# 的空闲 worker，而所有 worker 都在等 extract 返回——互相等待，死锁
+# extract = submit + 立即等待。列表推导每一轮都先等当前任务跑完
+# 才提交下一个——任意时刻池中至多 1 个任务在执行，并发被完全浪费，
+# 总耗时退化成顺序执行之和，max_workers 形同虚设
 ```
 
-正确做法：`extract_many` 直接 submit 底层任务 `self._run(...)`，不要经过 `extract()`。这是线程池编程的经典陷阱——嵌套提交到同一个池。
+正确做法：`extract_many` 直接 submit 底层任务 `self._run(...)`，不要经过 `extract()`。先把全部任务一次性入池（任务间零依赖、worker 自由领取），主线程再按输入顺序收割结果——**提交与等待分离，并发才能吃满**。
 
 ### 8.6 项目结构
 

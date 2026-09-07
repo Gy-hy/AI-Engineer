@@ -58,7 +58,7 @@ uv run python -m doc_extractor README.md       # ← 试试这个：.md 也能�
 | `core/registry.py` | 类方法；`TYPE_CHECKING` 解循环导入；fail fast；"存类不存实例" | 二、封装；8.4 |
 | `core/exceptions.py` | 两层异常（插件语言 → 调用方语言）；cause 链；OCP 在错误处理上的体现 | 8.5 决策 3 |
 | `core/loader.py` | importlib 动态加载；幂等来自 import 缓存；参数化包名（DIP） | 7.1；8.7 验收 8 |
-| `core/extractor.py` | 资源所有权（open/close 归主程序）；线程池双职（并发+超时）；`extract_many` 死锁陷阱；上下文管理器 | 8.5 决策 2、4 |
+| `core/extractor.py` | 资源所有权（open/close 归主程序）；线程池双职（并发+超时）；`extract_many` 提交/等待分离（复用 `extract()` 会丢并发）；上下文管理器 | 8.5 决策 2、4 |
 | `plugins/*.py` | 多态落地；各库 API 怪癖的封装；read 契约（不关 stream、无状态） | 四、多态；二、封装 |
 | `__main__.py` | 组合根：唯一的对象装配点；`main(argv)` 参数化 | 7.1（DIP） |
 | `tests/*.py` | 测试隔离（fixture 双清、快照恢复）；契约测试（stream 不被关） | 8.7 |
@@ -91,7 +91,7 @@ uv run python -m doc_extractor README.md       # ← 试试这个：.md 也能�
 |---|------|------|------|
 | `cls.__abstractmethods__` 在 `__init_subclass__` 里 AttributeError | 插件类一定义就炸 | ABCMeta 在 `__init_subclass__` 返回后才写入该属性；且 CPython 对此名的查找只查自己的 `__dict__`、不走 MRO（bpo-10006） | `reader.py` 注释 + 教程 8.4 |
 | dict 字段的 frozen dataclass 不可哈希 | `hash(doc)` 抛 TypeError | 自动生成的 `__hash__` 覆盖所有参与 eq 的字段，dict 不可哈希 | `document.py` |
-| 线程池嵌套死锁 | 批量抽取卡死 | 嵌套任务等待池中 worker，worker 又在等 extract 返回 | `extractor.py` 的 `extract_many` 注释 |
+| 批量抽取用列表推导复用 `extract()` | 并发全丢，总耗时 ≈ 串行 | `extract()` = submit + 立即等待；推导式每轮等当前任务完成才提交下一个，池中至多 1 个任务在跑 | `extractor.py` 的 `extract_many` 注释 |
 | 超时 ≠ 取消 | 超时后任务还在跑 | Python 线程无法强杀，超时只是"调用方不等了" | `exceptions.py` 的 `ExtractTimeoutError` |
 | 测试跨文件污染 | 加了新测试文件后旧测试莫名挂 | 注册表是进程级全局状态；clear 了别人的东西要恢复 | `test_loader.py` 的 `_preserve_registry` |
 | sys.modules 缓存 + 同名临时包 | 第二个测试拿到第一个测试的旧模块 | import 的语义是"执行且只执行一次" | `test_loader.py` 的 fixtures 注释 |

@@ -62,9 +62,11 @@ class Extractor:
         """批量抽取，结果顺序与输入一致。
 
         8.5 决策 4——为什么【不能】写成 [self.extract(p) for p in paths]：
-        那会把新任务提交进同一个线程池并在调用线程等待，而池中 worker
-        又在等 extract 返回——互相等待，死锁。
-        正确做法：直接 submit 底层 _run，绝不经过 extract。
+        extract = submit + 立即等待。放进列表推导后，每一轮都要先等
+        当前任务跑完才提交下一个——任意时刻池中至多 1 个任务在执行，
+        并发被完全浪费（总耗时 ≈ 顺序执行之和），max_workers 形同虚设。
+        正确做法：提交与等待分离——先把全部任务一次性 submit 进池
+        （任务间零依赖、worker 自由领取），主线程再按序收割。
         """
         path_list = [Path(p) for p in paths]
         # 先在快路径查注册表：坏扩展名在提交前就以异常暴露，

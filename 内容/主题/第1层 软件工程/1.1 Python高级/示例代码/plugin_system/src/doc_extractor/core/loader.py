@@ -32,14 +32,14 @@ def load_plugins(package: str = "doc_extractor.plugins") -> list[ModuleType]:
     参数化包名（DIP）：默认值是真实插件包；测试注入临时包名，
     从而不污染真实的 plugins 目录。
     """
-    pkg = importlib.import_module(package)
-    loaded: list[ModuleType] = []
+    pkg = importlib.import_module(package)  # 导入插件包本身
+    loaded: list[ModuleType] = []  # 加载的插件模块
 
     # pkgutil.iter_modules 按"模块发现"的语义列出包的直接子模块，
     # name 已带前缀（如 "doc_extractor.plugins.pdf_reader"），
     # __init__ 天然不会被列出。
-    for info in pkgutil.iter_modules(pkg.__path__, prefix=package + "."):
-        name = info.name
+    for info in pkgutil.iter_modules(pkg.__path__, prefix=package + "."):  # 模块发现 API：沿着 pkg.__path__ 用 finder 列出直接子模块
+        name = info.name  # 带前缀的完整模块名
         # 命名约定：下划线开头的模块是私有模块（如 __bad__.py），不是插件
         if name.rsplit(".", 1)[-1].startswith("_"):
             continue
