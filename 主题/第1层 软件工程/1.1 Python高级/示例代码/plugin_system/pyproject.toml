@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doc_extractor"
+version = "0.1.0"
+description = "插件化文档抽取器——PDF/DOCX/Excel 统一抽取为 Document（OOP Project 2）"
+requires-python = ">=3.12"
+dependencies = [
+    "pypdf>=5.0",        # PDF 解析
+    "python-docx>=1.1",  # DOCX 解析
+    "openpyxl>=3.1",     # Excel 解析
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",      # 测试
+    "reportlab>=4.0",   # 生成 PDF 样例文件
+]
+
+# 安装后可用 `doc-extractor <path>` 命令代替 `python -m doc_extractor <path>`
+# 前提：src/doc_extractor/__main__.py 里定义了 main()
+[project.scripts]
+doc-extractor = "doc_extractor.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+# 国内镜像——直连官方 PyPI 下载大依赖（如 lxml）经常断连
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true

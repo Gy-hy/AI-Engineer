@@ -1,0 +1,4730 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI 系统工程师完整培养计划">
+      
+      
+      
+      
+        <link rel="prev" href="../02%20OOP/">
+      
+      
+        <link rel="next" href="../04%20asyncio/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>02.3 typing - AI System Engineer Curriculum</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#typing" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../../.." title="AI System Engineer Curriculum" class="md-header__button md-logo" aria-label="AI System Engineer Curriculum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AI System Engineer Curriculum
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              02.3 typing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="标签" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  首页
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../../../%E6%8C%87%E5%8D%97/" class="md-tabs__link">
+          
+  
+  
+  指南
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../../../" class="md-tabs__link">
+          
+  
+  
+  主题
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="AI System Engineer Curriculum" class="md-nav__button md-logo" aria-label="AI System Engineer Curriculum" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    AI System Engineer Curriculum
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    首页
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    指南
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    指南
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    指南说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/%E8%AF%BE%E7%A8%8B%E6%80%BB%E8%A7%88/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    课程总览
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/%E5%AD%A6%E4%B9%A0%E8%B7%AF%E5%BE%84/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    学习路径
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/%E4%B9%A0%E9%A2%98%E7%B4%A2%E5%BC%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    习题索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/%E9%A1%B9%E7%9B%AE%E7%B4%A2%E5%BC%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    项目索引
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../../%E6%8C%87%E5%8D%97/%E8%B4%A1%E7%8C%AE%E6%8C%87%E5%8D%97/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    贡献指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    主题
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    主题
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    主题说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第1层 软件工程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第1层 软件工程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    层级说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_2" id="__nav_3_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.1 Python高级
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1.1 Python高级
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程导读
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01%20Python%E9%AB%98%E7%BA%A7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.1 Python高级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02%20OOP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.2 OOP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.3 typing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.3 typing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        零、先建立一个认知：类型标注改变的是"检查时机"，不是"运行行为"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、基础标注：变量、函数、参数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、基础标注：变量、函数、参数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 变量与函数标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 内置类型与容器类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 标注的两个常见误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-typex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 type[X]——"类本身"作为类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unionoptional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、联合与可选：Union、Optional 和 |
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、联合与可选：Union、Optional 和 |">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 一个值可能属于多种类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-optional-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Optional——"可能是 None"的联合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-union" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 联合类型的陷阱：别用 Union 糊弄接口设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Any——类型系统里的"逃生舱"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、Any——类型系统里的&#34;逃生舱&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Any 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Any 的正确用法与滥用
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#literalfinal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、字面量与常量：Literal、Final
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、字面量与常量：Literal、Final">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-literal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Literal——把"具体的几个值"作为类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Final——标记"不可重新赋值"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#callable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、可调用对象：Callable
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、可调用对象：Callable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 把"函数"本身作为参数/返回值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-callable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Callable 的局限——它描述不了参数名
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typealias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、类型别名：TypeAlias
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、类型别名：TypeAlias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 给复杂类型起个名字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-vs-newtype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 别名 vs 新类型——什么时候用 NewType
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typevar-generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、泛型：TypeVar 与 Generic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、泛型：TypeVar 与 Generic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 问题：如何描述"装着任意类型的容器"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-typevar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 TypeVar——声明类型变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 约束类型变量——限定 T 的范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Generic——泛型类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 呼应学习目标——泛型化的 Response 设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、结构化类型：Protocol
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、结构化类型：Protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 问题：鸭子类型丢失了"可检查性"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Protocol 的用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-protocol-vs-abc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Protocol vs ABC——关键区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typeddict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、类型化字典：TypedDict
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、类型化字典：TypedDict">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 问题：裸 dict 丢了键值结构信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-typeddict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 TypedDict 的用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-typeddict-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 TypedDict 的关键事实——它运行时就是普通 dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-typeddict-total" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 TypedDict 的细节：total 与可选键
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#annotated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、携带元数据的标注：Annotated
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、携带元数据的标注：Annotated">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 在类型之外附加信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-annotated-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Annotated 的真正威力——配合 pydantic 做运行时校验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-never" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、Self 与 Never
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、Self 与 Never">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-self" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Self——方法返回"当前类型"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-never" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Never——"这个函数不会正常返回"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#narrowing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、类型收窄（Narrowing）——检查器如何"读懂"你的分支
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、类型收窄（Narrowing）——检查器如何&#34;读懂&#34;你的分支">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 什么是类型收窄
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 常见的收窄手段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 收窄失效的陷阱
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mypy-pyright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、工具：mypy 与 pyright
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十三、工具：mypy 与 pyright">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-mypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 mypy——事实标准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-pyrightide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 pyright——微软出品，IDE 友好
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-3-100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十四、Project 3：给已有项目做 100% 类型标注
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十四、Project 3：给已有项目做 100% 类型标注">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 项目目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 正确的推进顺序（重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 验收标准（毕业标准）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十五、全章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十六、一条贯穿全章的判断
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04%20asyncio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.4 asyncio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05%20Context%20Manager/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.5 Context Manager
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06%20Decorator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.6 Decorator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07%20Generator/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.7 Generator
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08%20Logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.8 Logging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09%20Packaging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.9 Packaging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10%20Testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.10 Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11%20Performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02.11 Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_3" id="__nav_3_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.2 Git
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1.2 Git
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.2%20Git/01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.2%20Git/02%20%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.2%20Git/03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_4" id="__nav_3_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.3 Linux基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1.3 Linux基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.3%20Linux%E5%9F%BA%E7%A1%80/01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.3%20Linux%E5%9F%BA%E7%A1%80/02%20%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.3%20Linux%E5%9F%BA%E7%A1%80/03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_5" id="__nav_3_2_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.4 Docker基础
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1.4 Docker基础
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.4%20Docker%E5%9F%BA%E7%A1%80/01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.4%20Docker%E5%9F%BA%E7%A1%80/02%20%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.4%20Docker%E5%9F%BA%E7%A1%80/03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2_6" id="__nav_3_2_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1.5 Network
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_2_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1.5 Network
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.5%20Network/01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.5%20Network/02%20%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../1.5%20Network/03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第2层 后端工程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第2层 后端工程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC2%E5%B1%82%20%E5%90%8E%E7%AB%AF%E5%B7%A5%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    层级说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第3层 AI工程
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第3层 AI工程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC3%E5%B1%82%20AI%E5%B7%A5%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    层级说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4_2" id="__nav_3_4_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3.2 RAG
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3.2 RAG
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC3%E5%B1%82%20AI%E5%B7%A5%E7%A8%8B/3.2%20RAG/01%20%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01 学习目标
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC3%E5%B1%82%20AI%E5%B7%A5%E7%A8%8B/3.2%20RAG/02%20%E6%95%99%E7%A8%8B/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02 教程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC3%E5%B1%82%20AI%E5%B7%A5%E7%A8%8B/3.2%20RAG/03%20%E4%B9%A0%E9%A2%98/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03 习题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第4层 AI基础设施
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第4层 AI基础设施
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC4%E5%B1%82%20AI%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    层级说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    第5层 架构与职业发展
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    第5层 架构与职业发展
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../%E7%AC%AC5%E5%B1%82%20%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%81%8C%E4%B8%9A%E5%8F%91%E5%B1%95/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    层级说明
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        零、先建立一个认知：类型标注改变的是"检查时机"，不是"运行行为"
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        一、基础标注：变量、函数、参数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="一、基础标注：变量、函数、参数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 变量与函数标注
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 内置类型与容器类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 标注的两个常见误区
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-typex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 type[X]——"类本身"作为类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unionoptional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        二、联合与可选：Union、Optional 和 |
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="二、联合与可选：Union、Optional 和 |">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 一个值可能属于多种类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-optional-none" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Optional——"可能是 None"的联合
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-union" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 联合类型的陷阱：别用 Union 糊弄接口设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        三、Any——类型系统里的"逃生舱"
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="三、Any——类型系统里的&#34;逃生舱&#34;">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Any 是什么
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-any" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Any 的正确用法与滥用
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#literalfinal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        四、字面量与常量：Literal、Final
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="四、字面量与常量：Literal、Final">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-literal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Literal——把"具体的几个值"作为类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-final" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Final——标记"不可重新赋值"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#callable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        五、可调用对象：Callable
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="五、可调用对象：Callable">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 把"函数"本身作为参数/返回值
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-callable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Callable 的局限——它描述不了参数名
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typealias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        六、类型别名：TypeAlias
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="六、类型别名：TypeAlias">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 给复杂类型起个名字
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-vs-newtype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 别名 vs 新类型——什么时候用 NewType
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typevar-generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        七、泛型：TypeVar 与 Generic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="七、泛型：TypeVar 与 Generic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 问题：如何描述"装着任意类型的容器"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-typevar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 TypeVar——声明类型变量
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-t" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 约束类型变量——限定 T 的范围
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-generic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Generic——泛型类
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#75-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.5 呼应学习目标——泛型化的 Response 设计
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        八、结构化类型：Protocol
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="八、结构化类型：Protocol">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1 问题：鸭子类型丢失了"可检查性"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#82-protocol" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2 Protocol 的用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#83-protocol-vs-abc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3 Protocol vs ABC——关键区别
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typeddict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        九、类型化字典：TypedDict
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="九、类型化字典：TypedDict">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 问题：裸 dict 丢了键值结构信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#92-typeddict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.2 TypedDict 的用法
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#93-typeddict-dict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.3 TypedDict 的关键事实——它运行时就是普通 dict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#94-typeddict-total" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.4 TypedDict 的细节：total 与可选键
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#annotated" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十、携带元数据的标注：Annotated
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十、携带元数据的标注：Annotated">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#101" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.1 在类型之外附加信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#102-annotated-pydantic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10.2 Annotated 的真正威力——配合 pydantic 做运行时校验
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#self-never" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十一、Self 与 Never
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十一、Self 与 Never">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#111-self" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.1 Self——方法返回"当前类型"
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#112-never" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11.2 Never——"这个函数不会正常返回"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#narrowing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十二、类型收窄（Narrowing）——检查器如何"读懂"你的分支
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十二、类型收窄（Narrowing）——检查器如何&#34;读懂&#34;你的分支">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#121" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.1 什么是类型收窄
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#122" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.2 常见的收窄手段
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#123" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12.3 收窄失效的陷阱
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mypy-pyright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十三、工具：mypy 与 pyright
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十三、工具：mypy 与 pyright">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#131-mypy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.1 mypy——事实标准
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#132-pyrightide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13.2 pyright——微软出品，IDE 友好
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-3-100" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十四、Project 3：给已有项目做 100% 类型标注
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="十四、Project 3：给已有项目做 100% 类型标注">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#141" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.1 项目目标
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#142" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.2 正确的推进顺序（重要）
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#143" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14.3 验收标准（毕业标准）
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十五、全章速查表
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        十六、一条贯穿全章的判断
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="typing">typing（★★★★★）<a class="headerlink" href="#typing" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>目标：用类型标注把 Python 从"运行时才能发现错误"拉回"写代码时就被检查器抓住"——不是学一堆语法，而是理解类型系统能替你承担什么、不能替你承担什么。</strong></p>
+</blockquote>
+<hr />
+<h2 id="_1">零、先建立一个认知：类型标注改变的是"检查时机"，不是"运行行为"<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>在进入任何语法之前，必须先把一个最根本、也最容易被误解的事实钉死：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>          <span class="c1"># 3</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">add</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">)</span>      <span class="c1"># &quot;ab&quot;——不报错！Python 运行时完全无视类型标注</span>
+</code></pre></div>
+<p><code>a: int</code> 这个标注，<strong>Python 解释器在运行时会原样忽略</strong>。它不校验、不强制、不报错——程序该怎么跑还怎么跑。</p>
+<p>那么类型标注到底改变什么？它改变的是<strong>检查时机</strong>：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>没有类型标注</th>
+<th>有类型标注 + 静态检查器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型错误在哪里暴露</td>
+<td>运行时（可能在生产环境、可能几个月后才触发）</td>
+<td><strong>写代码时</strong>（IDE 里立刻标红 / mypy 命令行）</td>
+</tr>
+<tr>
+<td>谁来发现</td>
+<td>异常堆栈</td>
+<td>类型检查器（mypy / pyright）</td>
+</tr>
+<tr>
+<td>IDE 能否补全/跳转</td>
+<td>不能——它不知道 <code>x</code> 是什么</td>
+<td>能——它知道 <code>x: int</code></td>
+</tr>
+</tbody>
+</table>
+<p>所以类型标注的本质是：<strong>把一份"接口契约"写进代码，交给工具去机器验证。</strong> 它不替代运行时校验（那是 pydantic 的事，本教程 1.1 学习目标里的"三层划分"会呼应），它替代的是"靠人脑记住每个变量的类型"。</p>
+<p><strong>这条认知贯穿全章</strong>：下面每一个标注工具，你都要问自己两个问题——「它让检查器能多发现什么错误？」「它会在运行时留下什么副作用吗？」</p>
+<hr />
+<h2 id="_2">一、基础标注：变量、函数、参数<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h3 id="11">1.1 变量与函数标注<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;Alice&quot;</span>              <span class="c1"># 变量标注</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">greet</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>     <span class="c1"># 参数标注 + 返回值标注</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Hello, </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>规则很简单：</p>
+<ul>
+<li><strong>参数</strong>：<code>参数名: 类型</code></li>
+<li><strong>返回值</strong>：在 <code>)</code> 和 <code>:</code> 之间用 <code>-&gt; 类型</code></li>
+<li><strong>变量</strong>：<code>变量名: 类型 = 值</code>（标注可以和赋值分离，<code>x: int</code> 单独一行也是合法的）</li>
+</ul>
+<p>标注只在<strong>静态层面</strong>有意义，运行时它们以 <code>__annotations__</code> 的形式挂在对象上，但不会被强制执行：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">greet</span><span class="o">.</span><span class="vm">__annotations__</span>       <span class="c1"># {&#39;name&#39;: &lt;class &#39;str&#39;&gt;, &#39;return&#39;: &lt;class &#39;str&#39;&gt;}</span>
+</code></pre></div>
+<h3 id="12">1.2 内置类型与容器类型<a class="headerlink" href="#12" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># 标量</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">x</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">y</span><span class="p">:</span> <span class="nb">float</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">z</span><span class="p">:</span> <span class="nb">bool</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">s</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">b</span><span class="p">:</span> <span class="nb">bytes</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">n</span><span class="p">:</span> <span class="kc">None</span>                <span class="c1"># None 的类型是 NoneType，直接标 None</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="c1"># 容器（Python 3.9+ 用内置泛型语法）</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>                <span class="c1"># 3.9 之前要写 List[int]（from typing import List）</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">pairs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">coords</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">names</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>版本边界（重要，容易写错）：</strong> <code>list[int]</code>、<code>dict[str, int]</code> 这种<strong>小写内置泛型</strong>语法要求 <strong>Python ≥ 3.9</strong>。3.8 及以下必须从 <code>typing</code> 导入 <code>List</code>、<code>Dict</code>、<code>Tuple</code> 等大写版本：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>    <span class="c1"># 仅 3.8 及以下需要</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">nums</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">pairs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span>
+</code></pre></div>
+<p>这套教程假定 Python ≥ 3.9，全章一律用 <code>list[int]</code> 小写语法。</p>
+<p><strong>嵌套容器</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">matrix</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>                    <span class="c1"># 二维数组</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">scores</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>             <span class="c1"># 键是 str，值是 float 列表</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">registry</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span>       <span class="c1"># 值是一个二元组</span>
+</code></pre></div>
+<h3 id="13">1.3 标注的两个常见误区<a class="headerlink" href="#13" title="Permanent link">&para;</a></h3>
+<p><strong>误区一：以为标注会运行时校验。</strong> 前面已经讲过，<code>add("a", "b")</code> 照样跑。标注是给工具看的，不是给解释器看的。</p>
+<p><strong>误区二：不写返回值标注。</strong> 很多人只标参数不标返回值。但返回值标注往往更重要——它是<strong>函数的对外承诺</strong>，调用方靠它知道"我能拿到什么"。漏掉返回值标注，等于把你的接口契约只写了一半。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># ❌ 只标入参，不标返回——调用方不知道拿到的是什么</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">find_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    <span class="o">...</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1"># ✅ 完整契约</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">find_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="o">...</span>
+</code></pre></div>
+<h3 id="14-typex">1.4 <code>type[X]</code>——"类本身"作为类型<a class="headerlink" href="#14-typex" title="Permanent link">&para;</a></h3>
+<p>一个容易漏掉、但插件系统里一定会用到的标注：<strong>怎么标注"传进去的是一个类，而不是一个实例"？</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Dog</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dog</span><span class="p">:</span>    <span class="c1"># cls 是&quot;Dog 这个类本身&quot;</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="n">d</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">Dog</span><span class="p">,</span> <span class="s2">&quot;Rex&quot;</span><span class="p">)</span>     <span class="c1"># ✅ 传类</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">d</span> <span class="o">=</span> <span class="n">create</span><span class="p">(</span><span class="n">Dog</span><span class="p">(),</span> <span class="s2">&quot;Rex&quot;</span><span class="p">)</span>   <span class="c1"># ❌ mypy 报错：传了实例，不是类</span>
+</code></pre></div>
+<p><code>type[Dog]</code> 读作"<code>Dog</code> 这个类对象"（或它的子类）。它和 <code>Dog</code> 是<strong>两个不同的类型</strong>：</p>
+<ul>
+<li><code>Dog</code> 是"一个 Dog <strong>实例</strong>"；</li>
+<li><code>type[Dog]</code> 是"<code>Dog</code> 这个<strong>类本身</strong>"。</li>
+</ul>
+<p>这正是插件系统 <code>Registry</code> 的核心标注——注册表存的是「扩展名 → 类」（"存类不存实例"），所以它的类型是 <code>dict[str, type[DocumentReader]]</code>：值是<strong>类</strong>，不是 <code>DocumentReader</code> 的实例。这个知识点在第十四节的项目里会实际用到。</p>
+<hr />
+<h2 id="unionoptional">二、联合与可选：<code>Union</code>、<code>Optional</code> 和 <code>|</code><a class="headerlink" href="#unionoptional" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1 一个值可能属于多种类型<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p>函数可能返回整数或字符串、参数可能传列表或元组——这时需要<strong>联合类型</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Union</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><code>Union[int, float]</code> 表示"<code>int</code> 或 <code>float</code> 都行"。</p>
+<p><strong>Python 3.10+ 的简写</strong>——用 <code>|</code> 运算符：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">parse</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">:</span>      <span class="c1"># 等价于 Union[int, float]</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="o">...</span>
+</code></pre></div>
+<p>这套教程统一用 <code>|</code> 语法（要求 Python ≥ 3.10），它更简洁、无需 import。</p>
+<h3 id="22-optional-none">2.2 <code>Optional</code>——"可能是 None"的联合<a class="headerlink" href="#22-optional-none" title="Permanent link">&para;</a></h3>
+<p>编程里最常见的联合类型是"<code>X</code> 或 <code>None</code>"——查不到就返回 <code>None</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">find_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">User</span><span class="p">]:</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>    <span class="k">if</span> <span class="n">user_id</span> <span class="ow">in</span> <span class="n">db</span><span class="p">:</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>        <span class="k">return</span> <span class="n">db</span><span class="p">[</span><span class="n">user_id</span><span class="p">]</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="k">return</span> <span class="kc">None</span>                              <span class="c1"># 找不到时返回 None</span>
+</code></pre></div>
+<p><code>Optional[User]</code> 等价于 <code>Union[User, None]</code>——它<strong>不是</strong>"这个参数可传可不传"（那叫默认参数），而是"这个值可能是 <code>None</code>"。</p>
+<p><strong>3.10+ 的等价写法：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">find_user</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>   <span class="c1"># 推荐——更直白</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><strong>关键——<code>Optional</code> 逼着调用方处理 <code>None</code>。</strong> 一个标了 <code>Optional[User]</code> 的函数，检查器会强制调用方在使用返回值前先判空：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">user</span> <span class="o">=</span> <span class="n">find_user</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>          <span class="c1"># ❌ mypy 报错：user 可能是 None</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>                          <span class="c1"># error: Item &quot;None&quot; of &quot;Optional[User]&quot; has no attribute &quot;name&quot;</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>      <span class="c1"># ✅ 判空之后才安全</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
+<p>这正是类型标注最有价值的时刻：<strong>它把"你忘了判空"这种最常见的运行时崩溃，提前到写代码时抓出来。</strong></p>
+<h3 id="23-union">2.3 联合类型的陷阱：别用 <code>Union</code> 糊弄接口设计<a class="headerlink" href="#23-union" title="Permanent link">&para;</a></h3>
+<p><code>Union</code> 是万能的，但滥用它是坏味道。如果一个函数返回三种以上互不相干的类型，通常意味着<strong>接口设计有问题</strong>——调用方被迫写一堆 <code>isinstance</code> 分支才能用返回值：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># ❌ 反模式——返回类型太杂，调用方没法干净地使用</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>    <span class="o">...</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="c1"># ✅ 更好的设计——拆成明确的接口，或用自定义类型（见后面的 TypedDict/dataclass）</span>
+</code></pre></div>
+<p>一个值得记住的经验：<strong><code>Optional</code> 是合理的、高频的；但四五个类型的大杂烩联合，往往是设计缺陷的信号。</strong></p>
+<hr />
+<h2 id="any">三、<code>Any</code>——类型系统里的"逃生舱"<a class="headerlink" href="#any" title="Permanent link">&para;</a></h2>
+<h3 id="31-any">3.1 <code>Any</code> 是什么<a class="headerlink" href="#31-any" title="Permanent link">&para;</a></h3>
+<p><code>Any</code> 表示"任意类型，完全放弃检查"：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>    <span class="k">return</span> <span class="n">data</span>
+</code></pre></div>
+<p>一个标了 <code>Any</code> 的值，可以做<strong>任何事</strong>而检查器不抱怨——调任何方法、访问任何属性、赋给任何类型：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">x</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="n">some_function</span><span class="p">()</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">x</span><span class="o">.</span><span class="n">foo</span><span class="p">()</span>            <span class="c1"># 不报错</span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">x</span><span class="o">.</span><span class="n">bar</span> <span class="o">=</span> <span class="mi">1</span>          <span class="c1"># 不报错</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">x</span>         <span class="c1"># 不报错——Any 能赋给任何类型</span>
+</code></pre></div>
+<p><code>Any</code> 在类型系统里是<strong>双向可赋</strong>的：任何类型都能赋给 <code>Any</code>，<code>Any</code> 也能赋给任何类型。它就像一个黑洞，把类型检查整个吸掉。</p>
+<h3 id="32-any">3.2 <code>Any</code> 的正确用法与滥用<a class="headerlink" href="#32-any" title="Permanent link">&para;</a></h3>
+<p><strong>正确用法</strong>——当你确实处理"完全动态"的数据时：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">deserialize</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>     <span class="c1"># JSON 解析结果类型未知——用 Any 合理</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+</code></pre></div>
+<p><strong>滥用</strong>——把 <code>Any</code> 当偷懒的借口：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="c1"># ❌ 滥用——明明知道是什么类型，却用 Any 糊弄，检查器形同虚设</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Alice&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">}</span>    <span class="c1"># 你知道这是 dict[str, ...]</span>
+</code></pre></div>
+<p><strong>核心原则：<code>Any</code> 是逃生舱，不是默认选项。</strong> 每写一个 <code>Any</code>，你都应该能说出理由。<code>Any</code> 一旦扩散，类型检查的价值就归零了——一个 <code>Any</code> 变量会把"任意类型"传染给所有用到它的表达式，检查器对整条链都闭嘴。</p>
+<p><strong><code>Any</code> 与 <code>object</code> 的区别（容易混淆）：</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">f1</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span> <span class="o">...</span>       <span class="c1"># 放弃检查——x 什么都能干</span>
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">f2</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span> <span class="o">...</span> <span class="c1"># x 是&quot;最宽泛的基类&quot;——但它没有具体方法</span>
+</code></pre></div>
+<p><code>object</code> 是"所有类的基类"，标了 <code>object</code> 的变量<strong>仍然受检查</strong>——你不能在它上面调 <code>foo()</code>，因为 <code>object</code> 没有这个方法。而 <code>Any</code> 是"彻底不检查"。两者语义完全不同：<code>object</code> 是"一个我不知道具体类型、但保证是个对象的值"，<code>Any</code> 是"别管了，我什么都可能是"。</p>
+<hr />
+<h2 id="literalfinal">四、字面量与常量：<code>Literal</code>、<code>Final</code><a class="headerlink" href="#literalfinal" title="Permanent link">&para;</a></h2>
+<h3 id="41-literal">4.1 <code>Literal</code>——把"具体的几个值"作为类型<a class="headerlink" href="#41-literal" title="Permanent link">&para;</a></h3>
+<p>有些参数的合法取值是<strong>有限的几个字面量</strong>，而不是一个宽泛的 <code>str</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">set_mode</span><span class="p">(</span><span class="n">mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;read&quot;</span><span class="p">,</span> <span class="s2">&quot;write&quot;</span><span class="p">,</span> <span class="s2">&quot;append&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>    <span class="o">...</span>
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="n">set_mode</span><span class="p">(</span><span class="s2">&quot;read&quot;</span><span class="p">)</span>          <span class="c1"># ✅</span>
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="n">set_mode</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>             <span class="c1"># ❌ mypy 报错：只能是 &quot;read&quot; / &quot;write&quot; / &quot;append&quot;</span>
+</code></pre></div>
+<p><code>Literal["read", "write", "append"]</code> 的意思是：这个参数<strong>只接受这三个字符串</strong>。检查器会在你写错字面量（比如拼错、用了 <code>"r"</code> 这种简写）时立刻报警。</p>
+<p><strong>典型场景</strong>——区分重载语义、限制枚举值：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">fmt</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="s2">&quot;csv&quot;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>    <span class="o">...</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
+<a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># 配合 Union 表达&quot;有限可选值之一&quot;</span>
+<a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">Alignment</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">]</span>
+<a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>
+<a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">align</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mode</span><span class="p">:</span> <span class="n">Alignment</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><strong>注意 <code>Literal</code> 的边界：</strong> 它是给<strong>静态检查器</strong>看的，运行时没有任何作用——<code>set_mode("r")</code> 照样能跑，只是 mypy 会报错。它表达的是"契约上只允许这几个值"，配合检查器在写代码阶段拦截拼写错误和非法值。</p>
+<h3 id="42-final">4.2 <code>Final</code>——标记"不可重新赋值"<a class="headerlink" href="#42-final" title="Permanent link">&para;</a></h3>
+<p><code>Final</code> 用来声明"这个名字不该被重新赋值"：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Final</span>
+<a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>
+<a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">MAX_RETRIES</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="mi">3</span>
+<a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="n">API_BASE_URL</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;https://api.example.com&quot;</span>
+<a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
+<a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">5</span>        <span class="c1"># ❌ mypy 报错：不能重新赋值给 Final 变量</span>
+</code></pre></div>
+<p><code>Final</code> 有三个用途：</p>
+<p><strong>（a）模块级常量</strong>——阻止"常量被意外修改"：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="n">DEFAULT_TIMEOUT</span><span class="p">:</span> <span class="n">Final</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span>
+</code></pre></div>
+<p><strong>（b）类属性不被子类覆盖</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>    <span class="n">VERSION</span><span class="p">:</span> <span class="n">Final</span> <span class="o">=</span> <span class="s2">&quot;1.0&quot;</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">Child</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>    <span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;2.0&quot;</span>     <span class="c1"># ❌ mypy 报错：不能覆盖 Final 类属性</span>
+</code></pre></div>
+<p><strong>（c）<code>@final</code> 装饰器——方法/类不被覆盖</strong>（注意是<strong>小写 <code>@final</code> 装饰器</strong>，不是 <code>Final[...]</code> 标注）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">final</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Base</span><span class="p">:</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>    <span class="nd">@final</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">locked</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span> <span class="o">...</span>    <span class="c1"># 这个方法不允许子类 override</span>
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="nd">@final</span>
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="k">class</span><span class="w"> </span><span class="nc">Sealed</span><span class="p">:</span> <span class="o">...</span>                   <span class="c1"># 这个类不允许被继承</span>
+</code></pre></div>
+<p><strong><code>Final[...]</code> 和 <code>@final</code> 是两个不同的东西，别混：</strong> <code>Final[int]</code> 是<strong>标注</strong>，标在<strong>变量/属性</strong>上，表示"这个值不该被重新赋值"；<code>@final</code> 是<strong>装饰器</strong>，标在<strong>方法/类</strong>上，表示"这个方法不该被覆盖 / 这个类不该被继承"。两者来源相同（都表达"到此为止，别再改了"），但作用于不同的对象。</p>
+<p><strong>同样注意：<code>Final</code> 是静态约定，不是运行时强制。</strong> Python 解释器<strong>不会</strong>真的阻止你 <code>MAX_RETRIES = 5</code>——它照样执行。<code>Final</code> 的约束只在 mypy/pyright 层面生效。这一点和 Java 的 <code>final</code> 有本质区别（Java 是编译期强制）。</p>
+<hr />
+<h2 id="callable">五、可调用对象：<code>Callable</code><a class="headerlink" href="#callable" title="Permanent link">&para;</a></h2>
+<h3 id="51">5.1 把"函数"本身作为参数/返回值<a class="headerlink" href="#51" title="Permanent link">&para;</a></h3>
+<p>高阶函数（函数接受函数、函数返回函数）需要描述"函数"这个类型：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">apply</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>    <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+<a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>    <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+<a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+<a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">apply</span><span class="p">(</span><span class="n">double</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>    <span class="c1"># 10</span>
+</code></pre></div>
+<p><code>Callable[[int], int]</code> 的读法是：<strong>第一个方括号里是参数类型列表，第二个位置是返回值类型</strong>。</p>
+<ul>
+<li><code>Callable[[int], int]</code>——接受一个 <code>int</code>，返回 <code>int</code> 的函数</li>
+<li><code>Callable[[int, str], bool]</code>——接受 <code>int</code> 和 <code>str</code>，返回 <code>bool</code> 的函数</li>
+<li><code>Callable[[], None]</code>——不接受参数、返回 <code>None</code> 的函数（空参数列表 <code>[]</code>）</li>
+</ul>
+<h3 id="52-callable">5.2 <code>Callable</code> 的局限——它描述不了参数名<a class="headerlink" href="#52-callable" title="Permanent link">&para;</a></h3>
+<p><code>Callable</code> 只能描述<strong>位置和类型</strong>，描述不了<strong>关键字参数名</strong>。下面这个场景 <code>Callable</code> 就力不从心：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="c1"># 想表达&quot;接受关键字参数 name 和 age 的函数&quot;——Callable 做不到</span>
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="c1"># Callable[[int, str], ...] 只能描述位置，丢了参数名信息</span>
+</code></pre></div>
+<p>这种"需要精确描述参数签名"的场景，应该用 <code>Protocol</code>（见第八节）——<code>Protocol</code> 可以完整声明一个带参数名的方法签名。记住这个边界：<strong><code>Callable</code> 适合"匿名回调"（一个函数参数就够），<code>Protocol</code> 适合"有明确签名契约的对象"。</strong></p>
+<hr />
+<h2 id="typealias">六、类型别名：<code>TypeAlias</code><a class="headerlink" href="#typealias" title="Permanent link">&para;</a></h2>
+<h3 id="61">6.1 给复杂类型起个名字<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<p>当某个类型标注又长又重复出现时，给它起个别名：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeAlias</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">UserId</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">int</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="n">Matrix</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]]</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="n">Result</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]</span>
+<a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="n">Callback</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span>
+</code></pre></div>
+<p>之后就能直接用别名，代码可读性大幅提升：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">user_id</span><span class="p">:</span> <span class="n">UserId</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Matrix</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+<a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><strong>为什么要有 <code>TypeAlias</code> 这个显式标记？</strong> 因为裸赋值有歧义：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>            <span class="c1"># 这是&quot;一个 int 类型的变量&quot;</span>
+<a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="n">UserId</span> <span class="o">=</span> <span class="nb">int</span>          <span class="c1"># 这到底是&quot;类型别名&quot;还是&quot;一个变量&quot;？——从代码看不出</span>
+<a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="n">UserId</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">int</span>    <span class="c1"># 显式声明：这是类型别名，不是变量</span>
+</code></pre></div>
+<p><code>TypeAlias</code>（Python 3.10+）就是消除这个歧义的标记，让检查器和读代码的人都知道"这是一个类型的另一个名字，不是运行时变量"。</p>
+<h3 id="62-vs-newtype">6.2 别名 vs 新类型——什么时候用 <code>NewType</code><a class="headerlink" href="#62-vs-newtype" title="Permanent link">&para;</a></h3>
+<p><strong>关键区分：</strong> 类型别名只是"同一个类型的另一个名字"，<strong>不创造新的类型</strong>。如果两个概念在语义上不该混用、但底层类型相同，别名救不了你：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">UserId</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">int</span>
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a><span class="n">OrderId</span><span class="p">:</span> <span class="n">TypeAlias</span> <span class="o">=</span> <span class="nb">int</span>
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">:</span> <span class="n">OrderId</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Order</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a><span class="n">uid</span><span class="p">:</span> <span class="n">UserId</span> <span class="o">=</span> <span class="mi">42</span>
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a><span class="n">get_order</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>        <span class="c1"># ✅ 不报错！——UserId 和 OrderId 都是 int，别名挡不住</span>
+</code></pre></div>
+<p>想真正区分"语义上不同的两个 int"，用 <code>NewType</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">NewType</span>
+<a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>
+<a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a><span class="n">UserId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;UserId&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+<a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="n">OrderId</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;OrderId&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
+<a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>
+<a id="__codelineno-31-6" name="__codelineno-31-6" href="#__codelineno-31-6"></a><span class="n">uid</span> <span class="o">=</span> <span class="n">UserId</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-31-7" name="__codelineno-31-7" href="#__codelineno-31-7"></a><span class="n">get_order</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span>        <span class="c1"># ❌ mypy 报错：UserId 不能当 OrderId 用</span>
+</code></pre></div>
+<p><code>NewType</code> 在<strong>静态层面</strong>创造了一个新类型（检查器会区分），但<strong>运行时它就是个恒等函数</strong>（<code>UserId(42)</code> 返回的就是 <code>42</code> 本身，零开销）。这是它和 <code>class UserId(int)</code> 的本质区别——后者会在运行时真正创建一个子类对象，有开销。</p>
+<p><strong>什么时候用 <code>NewType</code>：</strong> 两个底层类型相同、但语义上绝不能混淆的标识（用户 ID vs 订单 ID、美元金额 vs 人民币金额）。它能防止"把订单 ID 错当成用户 ID 传进去"这类逻辑 bug。</p>
+<hr />
+<h2 id="typevar-generic">七、泛型：<code>TypeVar</code> 与 <code>Generic</code><a class="headerlink" href="#typevar-generic" title="Permanent link">&para;</a></h2>
+<h3 id="71">7.1 问题：如何描述"装着任意类型的容器"<a class="headerlink" href="#71" title="Permanent link">&para;</a></h3>
+<p>看这个函数：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">first</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="err">???</span><span class="p">:</span>    <span class="c1"># 返回值类型取决于 items 里装的是什么</span>
+<a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>    <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+<p><code>first([1, 2, 3])</code> 返回 <code>int</code>，<code>first(["a", "b"])</code> 返回 <code>str</code>——返回值类型<strong>由入参决定</strong>。普通标注无法表达"返回类型 = 入参列表的元素类型"这种关系。</p>
+<p>这就是<strong>泛型（Generic）</strong>要解决的问题：用一个<strong>类型变量</strong>代表"某个未知的类型"，并建立"入参与返回之间共享这个类型"的关系。</p>
+<h3 id="72-typevar">7.2 <code>TypeVar</code>——声明类型变量<a class="headerlink" href="#72-typevar" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>
+<a id="__codelineno-33-3" name="__codelineno-33-3" href="#__codelineno-33-3"></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>        <span class="c1"># 声明一个类型变量 T，代表&quot;任意类型&quot;</span>
+<a id="__codelineno-33-4" name="__codelineno-33-4" href="#__codelineno-33-4"></a>
+<a id="__codelineno-33-5" name="__codelineno-33-5" href="#__codelineno-33-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">first</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<a id="__codelineno-33-6" name="__codelineno-33-6" href="#__codelineno-33-6"></a>    <span class="k">return</span> <span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div>
+<p>现在检查器能精确推断：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="n">x</span> <span class="o">=</span> <span class="n">first</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>        <span class="c1"># x 的类型是 int</span>
+<a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">first</span><span class="p">([</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">])</span>       <span class="c1"># y 的类型是 str</span>
+</code></pre></div>
+<p><code>TypeVar("T")</code> 的 <code>"T"</code> 是名字（必须和变量名 <code>T</code> 一致）。类型变量是一个<strong>占位符</strong>，检查器在每次调用时把它绑定到实际类型，从而在 <code>list[T] → T</code> 之间建立"进什么、出什么"的关联。</p>
+<h3 id="73-t">7.3 约束类型变量——限定 T 的范围<a class="headerlink" href="#73-t" title="Permanent link">&para;</a></h3>
+<p>有时类型变量不是"任意类型"，而是"某几个类型之一"：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypeVar</span>
+<a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>
+<a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="n">Number</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;Number&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>     <span class="c1"># Number 只能是 int 或 float</span>
+<a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a>
+<a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">add</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Number</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Number</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Number</span><span class="p">:</span>
+<a id="__codelineno-35-6" name="__codelineno-35-6" href="#__codelineno-35-6"></a>    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</code></pre></div>
+<p><code>TypeVar("Number", int, float)</code> 表示 <code>Number</code> 被<strong>约束</strong>为 <code>int</code> 或 <code>float</code>，检查器会拒绝其他类型。</p>
+<p>另一个约束方式是 <code>bound=</code>（限定上界——必须是某类型的子类）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Animal</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>
+<a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="n">AnimalType</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;AnimalType&quot;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">Animal</span><span class="p">)</span>    <span class="c1"># 必须是 Animal 的子类</span>
+<a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>
+<a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">feed</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">AnimalType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnimalType</span><span class="p">:</span>
+<a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><strong><code>TypeVar</code> 约束 vs <code>bound</code> 的区别：</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>TypeVar("T", int, float)</code></th>
+<th><code>TypeVar("T", bound=Animal)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>允许的类型</td>
+<td>明确列出的这几个</td>
+<td><code>Animal</code> 及其所有子类</td>
+</tr>
+<tr>
+<td>语义</td>
+<td>"只能是这几个之一"</td>
+<td>"必须是某个家族的一员"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="74-generic">7.4 <code>Generic</code>——泛型类<a class="headerlink" href="#74-generic" title="Permanent link">&para;</a></h3>
+<p>泛型不只用于函数，也用于<strong>类</strong>。最经典的场景就是"一个容器类，装着某种类型的元素"：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span>
+<a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>
+<a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+<a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>
+<a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Box</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+<a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">T</span><span class="p">):</span>
+<a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_item</span> <span class="o">=</span> <span class="n">item</span>
+<a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a>
+<a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+<a id="__codelineno-37-10" name="__codelineno-37-10" href="#__codelineno-37-10"></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_item</span>
+<a id="__codelineno-37-11" name="__codelineno-37-11" href="#__codelineno-37-11"></a>
+<a id="__codelineno-37-12" name="__codelineno-37-12" href="#__codelineno-37-12"></a><span class="n">int_box</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>          <span class="c1"># 装着 int 的盒子</span>
+<a id="__codelineno-37-13" name="__codelineno-37-13" href="#__codelineno-37-13"></a><span class="n">str_box</span><span class="p">:</span> <span class="n">Box</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Box</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>     <span class="c1"># 装着 str 的盒子</span>
+<a id="__codelineno-37-14" name="__codelineno-37-14" href="#__codelineno-37-14"></a>
+<a id="__codelineno-37-15" name="__codelineno-37-15" href="#__codelineno-37-15"></a><span class="n">n</span> <span class="o">=</span> <span class="n">int_box</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>    <span class="c1"># n 是 int——检查器知道</span>
+<a id="__codelineno-37-16" name="__codelineno-37-16" href="#__codelineno-37-16"></a><span class="n">s</span> <span class="o">=</span> <span class="n">str_box</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>    <span class="c1"># s 是 str——检查器知道</span>
+</code></pre></div>
+<p><code>class Box(Generic[T])</code> 声明这是一个泛型类，<code>T</code> 是它的类型参数。使用时用 <code>Box[int]</code>、<code>Box[str]</code> 指定具体类型。</p>
+<h3 id="75-response">7.5 呼应学习目标——泛型化的 Response 设计<a class="headerlink" href="#75-response" title="Permanent link">&para;</a></h3>
+<p>学习目标 1.4 里提过「泛型化 Schema 设计」，这里正好完整展开。不用泛型时，后端项目会为每个资源写几乎一样的响应结构：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">UserResponse</span><span class="p">:</span>
+<a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">User</span>
+<a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a>    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-38-5" name="__codelineno-38-5" href="#__codelineno-38-5"></a>
+<a id="__codelineno-38-6" name="__codelineno-38-6" href="#__codelineno-38-6"></a><span class="k">class</span><span class="w"> </span><span class="nc">OrderResponse</span><span class="p">:</span>
+<a id="__codelineno-38-7" name="__codelineno-38-7" href="#__codelineno-38-7"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">Order</span>
+<a id="__codelineno-38-8" name="__codelineno-38-8" href="#__codelineno-38-8"></a>    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-38-9" name="__codelineno-38-9" href="#__codelineno-38-9"></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-38-10" name="__codelineno-38-10" href="#__codelineno-38-10"></a>
+<a id="__codelineno-38-11" name="__codelineno-38-11" href="#__codelineno-38-11"></a><span class="k">class</span><span class="w"> </span><span class="nc">ProductResponse</span><span class="p">:</span>      <span class="c1"># 每加一个资源，就复制粘贴一份</span>
+<a id="__codelineno-38-12" name="__codelineno-38-12" href="#__codelineno-38-12"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">Product</span>
+<a id="__codelineno-38-13" name="__codelineno-38-13" href="#__codelineno-38-13"></a>    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-38-14" name="__codelineno-38-14" href="#__codelineno-38-14"></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+<p>用 <code>Generic[T]</code> 一次性消灭这种重复：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span>
+<a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a>
+<a id="__codelineno-39-3" name="__codelineno-39-3" href="#__codelineno-39-3"></a><span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+<a id="__codelineno-39-4" name="__codelineno-39-4" href="#__codelineno-39-4"></a>
+<a id="__codelineno-39-5" name="__codelineno-39-5" href="#__codelineno-39-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Response</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+<a id="__codelineno-39-6" name="__codelineno-39-6" href="#__codelineno-39-6"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">T</span>
+<a id="__codelineno-39-7" name="__codelineno-39-7" href="#__codelineno-39-7"></a>    <span class="n">code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-39-8" name="__codelineno-39-8" href="#__codelineno-39-8"></a>    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;ok&quot;</span>
+<a id="__codelineno-39-9" name="__codelineno-39-9" href="#__codelineno-39-9"></a>
+<a id="__codelineno-39-10" name="__codelineno-39-10" href="#__codelineno-39-10"></a><span class="k">class</span><span class="w"> </span><span class="nc">PaginatedResponse</span><span class="p">(</span><span class="n">Generic</span><span class="p">[</span><span class="n">T</span><span class="p">]):</span>
+<a id="__codelineno-39-11" name="__codelineno-39-11" href="#__codelineno-39-11"></a>    <span class="n">items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">T</span><span class="p">]</span>
+<a id="__codelineno-39-12" name="__codelineno-39-12" href="#__codelineno-39-12"></a>    <span class="n">total</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-39-13" name="__codelineno-39-13" href="#__codelineno-39-13"></a>    <span class="n">page</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-39-14" name="__codelineno-39-14" href="#__codelineno-39-14"></a>    <span class="n">page_size</span><span class="p">:</span> <span class="nb">int</span>
+</code></pre></div>
+<p>使用时按需实例化：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="n">user_resp</span><span class="p">:</span> <span class="n">Response</span><span class="p">[</span><span class="n">User</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="n">order_resp</span><span class="p">:</span> <span class="n">Response</span><span class="p">[</span><span class="n">Order</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+<a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="n">page</span><span class="p">:</span> <span class="n">PaginatedResponse</span><span class="p">[</span><span class="n">Product</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+</code></pre></div>
+<p><strong>一个 <code>Response[T]</code> 泛型，替代了所有 <code>xxResponse</code> 的重复定义</strong>——这就是泛型省下的真实劳动，也是"能跑"和"工程化"之间的分界线。</p>
+<hr />
+<h2 id="protocol">八、结构化类型：<code>Protocol</code><a class="headerlink" href="#protocol" title="Permanent link">&para;</a></h2>
+<h3 id="81">8.1 问题：鸭子类型丢失了"可检查性"<a class="headerlink" href="#81" title="Permanent link">&para;</a></h3>
+<p>回顾 OOP 教程 4.2 的鸭子类型：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="n">animal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a>    <span class="k">return</span> <span class="n">animal</span><span class="o">.</span><span class="n">speak</span><span class="p">()</span>    <span class="c1"># 依赖&quot;有 speak() 方法&quot;这个隐含契约</span>
+</code></pre></div>
+<p>问题在于：这个契约<strong>只存在于程序员的脑子里</strong>，检查器看不到。传错对象时，错误要等到运行时才 <code>AttributeError</code>。</p>
+<p><code>Protocol</code> 解决的就是这个：<strong>把"结构契约"写出来，让鸭子类型变得可静态检查。</strong></p>
+<h3 id="82-protocol">8.2 <code>Protocol</code> 的用法<a class="headerlink" href="#82-protocol" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Protocol</span>
+<a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
+<a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Speaker</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
+<a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span> <span class="o">...</span>
+<a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a>
+<a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">make_sound</span><span class="p">(</span><span class="n">animal</span><span class="p">:</span> <span class="n">Speaker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>    <span class="c1"># 标注协议，而非具体类</span>
+<a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a>    <span class="k">return</span> <span class="n">animal</span><span class="o">.</span><span class="n">speak</span><span class="p">()</span>
+</code></pre></div>
+<p><code>Protocol</code> 声明了一个<strong>结构约定</strong>：任何<strong>拥有</strong> <code>speak(self) -&gt; str</code> 方法的类，都自动"满足" <code>Speaker</code> 协议——<strong>不需要继承它</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Dog</span><span class="p">:</span>
+<a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>        <span class="k">return</span> <span class="s2">&quot;woof!&quot;</span>
+<a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a>
+<a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="k">class</span><span class="w"> </span><span class="nc">Cat</span><span class="p">:</span>
+<a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">speak</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a>        <span class="k">return</span> <span class="s2">&quot;meow!&quot;</span>
+<a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>
+<a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">make_sound</span><span class="p">(</span><span class="n">Dog</span><span class="p">())</span>    <span class="c1"># ✅ 检查器认可——Dog 有 speak()</span>
+<a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">make_sound</span><span class="p">(</span><span class="n">Cat</span><span class="p">())</span>    <span class="c1"># ✅ 检查器认可——Cat 有 speak()</span>
+<a id="__codelineno-43-11" name="__codelineno-43-11" href="#__codelineno-43-11"></a>
+<a id="__codelineno-43-12" name="__codelineno-43-12" href="#__codelineno-43-12"></a><span class="k">def</span><span class="w"> </span><span class="nf">make_sound_wrong</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Speaker</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-43-13" name="__codelineno-43-13" href="#__codelineno-43-13"></a>    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">speak</span><span class="p">()</span>
+<a id="__codelineno-43-14" name="__codelineno-43-14" href="#__codelineno-43-14"></a>
+<a id="__codelineno-43-15" name="__codelineno-43-15" href="#__codelineno-43-15"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">make_sound_wrong</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>    <span class="c1"># ❌ mypy 报错：int 没有 speak 方法</span>
+</code></pre></div>
+<p>这就是 <strong>结构化类型（Structural Typing）</strong> 的形式化：<strong>类型由"有什么方法"决定，不由"继承自谁"决定</strong>。<code>Protocol</code> 把鸭子类型从"运行时才发现"变成"写代码时就能验证"。</p>
+<h3 id="83-protocol-vs-abc">8.3 <code>Protocol</code> vs ABC——关键区别<a class="headerlink" href="#83-protocol-vs-abc" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ABC（<code>collections.abc</code>/自定义）</th>
+<th><code>Protocol</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实现类要不要继承</td>
+<td>要——必须显式继承才"是"它</td>
+<td>不要——有方法就算满足</td>
+</tr>
+<tr>
+<td>检查方式</td>
+<td>运行时（实例化时拒绝）</td>
+<td>静态（检查器检查）</td>
+</tr>
+<tr>
+<td>是否创造运行时开销</td>
+<td>有（metaclass、继承关系）</td>
+<td><strong>无</strong>——纯标注，运行时不存在</td>
+</tr>
+</tbody>
+</table>
+<p><strong>核心区别一句话：</strong> ABC 是"名义类型"（<code>isinstance(obj, ABC)</code> 靠继承关系），Protocol 是"结构类型"（看有没有方法，不看继承）。所以：</p>
+<ul>
+<li>需要运行时 <code>isinstance</code> 检查、需要 mixin 默认实现 → 用 <strong>ABC</strong>；</li>
+<li>只想给鸭子类型补上静态检查、不想强迫别人继承你的基类 → 用 <strong>Protocol</strong>。</li>
+</ul>
+<p><code>Protocol</code> 尤其适合<strong>跨库协作</strong>：你想约束"传入的对象必须有 <code>close()</code> 方法"，但那个对象来自第三方库、你不可能去改它的继承——这时 Protocol 就是唯一解。</p>
+<hr />
+<h2 id="typeddict">九、类型化字典：<code>TypedDict</code><a class="headerlink" href="#typeddict" title="Permanent link">&para;</a></h2>
+<h3 id="91-dict">9.1 问题：裸 <code>dict</code> 丢了键值结构信息<a class="headerlink" href="#91-dict" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">}</span>
+<a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a>
+<a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="n">cfg</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+<a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;host&quot;</span><span class="p">]</span>       <span class="c1"># 检查器不知道 &quot;host&quot; 这个键存在不存在、值是什么类型</span>
+<a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;hst&quot;</span><span class="p">]</span>        <span class="c1"># 拼写错误——但检查器看不出来，运行时才 KeyError</span>
+</code></pre></div>
+<p>裸 <code>dict</code> 是最灵活的，也是最容易出错的——<strong>键名拼错、键值类型记错，检查器一概抓不到</strong>。</p>
+<p><code>TypedDict</code> 解决的就是这个：给 dict 的<strong>键值结构</strong>打上标注。</p>
+<h3 id="92-typeddict">9.2 <code>TypedDict</code> 的用法<a class="headerlink" href="#92-typeddict" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span>
+<a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a>
+<a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a>    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a>
+<a id="__codelineno-45-7" name="__codelineno-45-7" href="#__codelineno-45-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+<a id="__codelineno-45-8" name="__codelineno-45-8" href="#__codelineno-45-8"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="s2">&quot;localhost&quot;</span><span class="p">,</span> <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="mi">8080</span><span class="p">}</span>
+<a id="__codelineno-45-9" name="__codelineno-45-9" href="#__codelineno-45-9"></a>
+<a id="__codelineno-45-10" name="__codelineno-45-10" href="#__codelineno-45-10"></a><span class="n">cfg</span> <span class="o">=</span> <span class="n">get_config</span><span class="p">()</span>
+<a id="__codelineno-45-11" name="__codelineno-45-11" href="#__codelineno-45-11"></a><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;host&quot;</span><span class="p">]</span>           <span class="c1"># ✅ 检查器知道 &quot;host&quot; 存在，值是 str</span>
+<a id="__codelineno-45-12" name="__codelineno-45-12" href="#__codelineno-45-12"></a><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;hst&quot;</span><span class="p">]</span>            <span class="c1"># ❌ mypy 报错：TypedDict &quot;Config&quot; 没有 &quot;hst&quot; 键</span>
+<a id="__codelineno-45-13" name="__codelineno-45-13" href="#__codelineno-45-13"></a><span class="n">cfg</span><span class="p">[</span><span class="s2">&quot;port&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;80&quot;</span>    <span class="c1"># ❌ mypy 报错：port 应该是 int</span>
+</code></pre></div>
+<h3 id="93-typeddict-dict">9.3 <code>TypedDict</code> 的关键事实——它运行时就是普通 dict<a class="headerlink" href="#93-typeddict-dict" title="Permanent link">&para;</a></h3>
+<p><strong>最重要的一点：<code>TypedDict</code> 在运行时不存在任何东西。</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-46-1" name="__codelineno-46-1" href="#__codelineno-46-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-46-2" name="__codelineno-46-2" href="#__codelineno-46-2"></a>    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-46-3" name="__codelineno-46-3" href="#__codelineno-46-3"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-46-4" name="__codelineno-46-4" href="#__codelineno-46-4"></a>
+<a id="__codelineno-46-5" name="__codelineno-46-5" href="#__codelineno-46-5"></a><span class="o">&gt;&gt;&gt;</span> <span class="n">Config</span>                <span class="c1"># &lt;class &#39;dict&#39;&gt;——TypedDict 就是个普通 dict</span>
+<a id="__codelineno-46-6" name="__codelineno-46-6" href="#__codelineno-46-6"></a><span class="o">&gt;&gt;&gt;</span> <span class="nb">isinstance</span><span class="p">({</span><span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="n">Config</span><span class="p">)</span>    <span class="c1"># 返回 dict 的类型检查，没有 Config 这个类型</span>
+</code></pre></div>
+<p><code>TypedDict</code> 是<strong>纯静态标注</strong>：它只存在于类型检查器里，运行时不产生任何新类型、不产生任何校验。你甚至可以 <code>cfg["anything"] = 123</code> 而不报错（运行时），只是 mypy 会标红。</p>
+<p><strong>因此它只适合"内部高频、彼此信任"的数据流转</strong>（呼应学习目标 1.1 的三层划分）：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>工具</th>
+<th>运行时校验</th>
+<th>场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定义数据结构</td>
+<td><code>dataclass</code></td>
+<td>否</td>
+<td>程序内部自己构造</td>
+</tr>
+<tr>
+<td>运行时数据流转</td>
+<td><strong><code>TypedDict</code></strong></td>
+<td>否</td>
+<td>模块间传递，彼此信任</td>
+</tr>
+<tr>
+<td>接口级数据流转</td>
+<td><code>pydantic.BaseModel</code></td>
+<td><strong>是</strong></td>
+<td>外部输入（HTTP body、MQ、第三方 API）</td>
+</tr>
+</tbody>
+</table>
+<p><code>TypedDict</code> 适合"两个内部函数之间传一个配置字典"——没必要花运行时校验的开销。但一旦数据来自外部输入（前端 JSON、消息队列），必须换 <code>pydantic.BaseModel</code> 做真正的运行时校验，否则脏数据会穿透到业务逻辑。</p>
+<h3 id="94-typeddict-total">9.4 <code>TypedDict</code> 的细节：<code>total</code> 与可选键<a class="headerlink" href="#94-typeddict-total" title="Permanent link">&para;</a></h3>
+<p>默认所有键都是<strong>必需的</strong>。想让某些键可选，用 <code>total=False</code> 或 <code>NotRequired</code>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-47-1" name="__codelineno-47-1" href="#__codelineno-47-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TypedDict</span><span class="p">,</span> <span class="n">NotRequired</span>    <span class="c1"># 3.11+ 用 NotRequired</span>
+<a id="__codelineno-47-2" name="__codelineno-47-2" href="#__codelineno-47-2"></a>
+<a id="__codelineno-47-3" name="__codelineno-47-3" href="#__codelineno-47-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<a id="__codelineno-47-4" name="__codelineno-47-4" href="#__codelineno-47-4"></a>    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span>
+<a id="__codelineno-47-5" name="__codelineno-47-5" href="#__codelineno-47-5"></a>    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-47-6" name="__codelineno-47-6" href="#__codelineno-47-6"></a>    <span class="n">timeout</span><span class="p">:</span> <span class="n">NotRequired</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>    <span class="c1"># 可选键——可以不传</span>
+</code></pre></div>
+<p>（Python 3.10 及以下用 <code>total=False</code> 声明整个 dict 的键都可选，或用 <code>typing_extensions</code> 的 <code>NotRequired</code>。）</p>
+<hr />
+<h2 id="annotated">十、携带元数据的标注：<code>Annotated</code><a class="headerlink" href="#annotated" title="Permanent link">&para;</a></h2>
+<h3 id="101">10.1 在类型之外附加信息<a class="headerlink" href="#101" title="Permanent link">&para;</a></h3>
+<p>有时你不仅想标注类型，还想在类型上<strong>挂额外的元数据</strong>——比如取值范围、单位、校验规则：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-48-1" name="__codelineno-48-1" href="#__codelineno-48-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<a id="__codelineno-48-2" name="__codelineno-48-2" href="#__codelineno-48-2"></a>
+<a id="__codelineno-48-3" name="__codelineno-48-3" href="#__codelineno-48-3"></a><span class="n">UserId</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;primary key&quot;</span><span class="p">]</span>
+<a id="__codelineno-48-4" name="__codelineno-48-4" href="#__codelineno-48-4"></a><span class="n">Port</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="s2">&quot;0-65535&quot;</span><span class="p">]</span>
+<a id="__codelineno-48-5" name="__codelineno-48-5" href="#__codelineno-48-5"></a>
+<a id="__codelineno-48-6" name="__codelineno-48-6" href="#__codelineno-48-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">connect</span><span class="p">(</span><span class="n">port</span><span class="p">:</span> <span class="n">Port</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-48-7" name="__codelineno-48-7" href="#__codelineno-48-7"></a>    <span class="o">...</span>
+</code></pre></div>
+<p><code>Annotated[int, "0-65535"]</code> 的意思是：<strong>类型是 <code>int</code>，附带一段元数据 <code>"0-65535"</code></strong>。类型检查器只认第一个参数（<code>int</code>），后面的元数据对检查器是透明的。</p>
+<h3 id="102-annotated-pydantic">10.2 <code>Annotated</code> 的真正威力——配合 pydantic 做运行时校验<a class="headerlink" href="#102-annotated-pydantic" title="Permanent link">&para;</a></h3>
+<p><code>Annotated</code> 单独用意义不大，它的价值在于<strong>让运行时校验框架（pydantic）读到元数据</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-49-1" name="__codelineno-49-1" href="#__codelineno-49-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotated</span>
+<a id="__codelineno-49-2" name="__codelineno-49-2" href="#__codelineno-49-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<a id="__codelineno-49-3" name="__codelineno-49-3" href="#__codelineno-49-3"></a>
+<a id="__codelineno-49-4" name="__codelineno-49-4" href="#__codelineno-49-4"></a><span class="k">class</span><span class="w"> </span><span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<a id="__codelineno-49-5" name="__codelineno-49-5" href="#__codelineno-49-5"></a>    <span class="n">name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">min_length</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">)]</span>
+<a id="__codelineno-49-6" name="__codelineno-49-6" href="#__codelineno-49-6"></a>    <span class="n">age</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">ge</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">le</span><span class="o">=</span><span class="mi">150</span><span class="p">)]</span>
+<a id="__codelineno-49-7" name="__codelineno-49-7" href="#__codelineno-49-7"></a>    <span class="n">email</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Field</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;^[\w\.-]+@[\w\.-]+\.\w+$&quot;</span><span class="p">)]</span>
+</code></pre></div>
+<p>这里 <code>Annotated[str, Field(...)]</code> 把<strong>类型</strong>（<code>str</code>）和<strong>校验约束</strong>（<code>Field</code>）绑在一起：类型检查器看到 <code>str</code>，pydantic 在运行时读到 <code>Field</code> 的约束并真正校验。</p>
+<p><strong><code>Annotated</code> 的本质：</strong> 它是"类型的容器"——第一项永远是真实类型，后面任意项是给不同工具消费的元数据。类型检查器消费第一项，pydantic 消费 <code>Field</code>，其他工具可以消费别的。这让你能<strong>在一个标注上叠加多层语义</strong>，而不是为每种语义造一个类型。</p>
+<hr />
+<h2 id="self-never">十一、<code>Self</code> 与 <code>Never</code><a class="headerlink" href="#self-never" title="Permanent link">&para;</a></h2>
+<h3 id="111-self">11.1 <code>Self</code>——方法返回"当前类型"<a class="headerlink" href="#111-self" title="Permanent link">&para;</a></h3>
+<p>一个常见的场景：方法返回 <code>self</code>，用于<strong>链式调用</strong>（fluent API）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-50-1" name="__codelineno-50-1" href="#__codelineno-50-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">Builder</span><span class="p">:</span>
+<a id="__codelineno-50-2" name="__codelineno-50-2" href="#__codelineno-50-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Builder</span><span class="p">:</span>    <span class="c1"># ❌ 写死 Builder 有隐患</span>
+<a id="__codelineno-50-3" name="__codelineno-50-3" href="#__codelineno-50-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-50-4" name="__codelineno-50-4" href="#__codelineno-50-4"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-50-5" name="__codelineno-50-5" href="#__codelineno-50-5"></a>
+<a id="__codelineno-50-6" name="__codelineno-50-6" href="#__codelineno-50-6"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Builder</span><span class="p">:</span>
+<a id="__codelineno-50-7" name="__codelineno-50-7" href="#__codelineno-50-7"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_age</span> <span class="o">=</span> <span class="n">age</span>
+<a id="__codelineno-50-8" name="__codelineno-50-8" href="#__codelineno-50-8"></a>        <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div>
+<p>问题在哪？当子类继承 <code>Builder</code> 时：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-51-1" name="__codelineno-51-1" href="#__codelineno-51-1"></a><span class="k">class</span><span class="w"> </span><span class="nc">UserBuilder</span><span class="p">(</span><span class="n">Builder</span><span class="p">):</span>
+<a id="__codelineno-51-2" name="__codelineno-51-2" href="#__codelineno-51-2"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserBuilder</span><span class="p">:</span>
+<a id="__codelineno-51-3" name="__codelineno-51-3" href="#__codelineno-51-3"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_role</span> <span class="o">=</span> <span class="n">role</span>
+<a id="__codelineno-51-4" name="__codelineno-51-4" href="#__codelineno-51-4"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-51-5" name="__codelineno-51-5" href="#__codelineno-51-5"></a>
+<a id="__codelineno-51-6" name="__codelineno-51-6" href="#__codelineno-51-6"></a><span class="n">UserBuilder</span><span class="p">()</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<a id="__codelineno-51-7" name="__codelineno-51-7" href="#__codelineno-51-7"></a><span class="c1">#                  ↑ 返回 Builder 类型，检查器认为没有 set_role 方法！</span>
+</code></pre></div>
+<p><code>set_name</code> 标注返回 <code>Builder</code>，所以链式调用时检查器认为后面只能调 <code>Builder</code> 的方法，<code>set_role</code> 会报错——但运行时它明明存在。</p>
+<p><strong><code>Self</code>（Python 3.11+）解决的就是"返回当前类型"</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-52-1" name="__codelineno-52-1" href="#__codelineno-52-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+<a id="__codelineno-52-2" name="__codelineno-52-2" href="#__codelineno-52-2"></a>
+<a id="__codelineno-52-3" name="__codelineno-52-3" href="#__codelineno-52-3"></a><span class="k">class</span><span class="w"> </span><span class="nc">Builder</span><span class="p">:</span>
+<a id="__codelineno-52-4" name="__codelineno-52-4" href="#__codelineno-52-4"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>    <span class="c1"># ✅ 返回&quot;调用它的那个类型&quot;</span>
+<a id="__codelineno-52-5" name="__codelineno-52-5" href="#__codelineno-52-5"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+<a id="__codelineno-52-6" name="__codelineno-52-6" href="#__codelineno-52-6"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-52-7" name="__codelineno-52-7" href="#__codelineno-52-7"></a>
+<a id="__codelineno-52-8" name="__codelineno-52-8" href="#__codelineno-52-8"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_age</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">age</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<a id="__codelineno-52-9" name="__codelineno-52-9" href="#__codelineno-52-9"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_age</span> <span class="o">=</span> <span class="n">age</span>
+<a id="__codelineno-52-10" name="__codelineno-52-10" href="#__codelineno-52-10"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-52-11" name="__codelineno-52-11" href="#__codelineno-52-11"></a>
+<a id="__codelineno-52-12" name="__codelineno-52-12" href="#__codelineno-52-12"></a><span class="k">class</span><span class="w"> </span><span class="nc">UserBuilder</span><span class="p">(</span><span class="n">Builder</span><span class="p">):</span>
+<a id="__codelineno-52-13" name="__codelineno-52-13" href="#__codelineno-52-13"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_role</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
+<a id="__codelineno-52-14" name="__codelineno-52-14" href="#__codelineno-52-14"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_role</span> <span class="o">=</span> <span class="n">role</span>
+<a id="__codelineno-52-15" name="__codelineno-52-15" href="#__codelineno-52-15"></a>        <span class="k">return</span> <span class="bp">self</span>
+<a id="__codelineno-52-16" name="__codelineno-52-16" href="#__codelineno-52-16"></a>
+<a id="__codelineno-52-17" name="__codelineno-52-17" href="#__codelineno-52-17"></a><span class="n">UserBuilder</span><span class="p">()</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">set_role</span><span class="p">(</span><span class="s2">&quot;admin&quot;</span><span class="p">)</span>
+<a id="__codelineno-52-18" name="__codelineno-52-18" href="#__codelineno-52-18"></a><span class="c1">#                  ↑ 现在返回 UserBuilder，set_role 能正常补全</span>
+</code></pre></div>
+<p><code>Self</code> 表示"<strong>当前这个类的类型</strong>"，子类调用时它自动变成子类类型——链式调用在继承体系里也能正确工作。这是 fluent API、builder 模式在类型层面的标准解法。</p>
+<h3 id="112-never">11.2 <code>Never</code>——"这个函数不会正常返回"<a class="headerlink" href="#112-never" title="Permanent link">&para;</a></h3>
+<p>有些函数<strong>永远不会返回</strong>——要么抛异常，要么无限循环：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-53-1" name="__codelineno-53-1" href="#__codelineno-53-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Never</span>    <span class="c1"># 3.11+；3.10 及以下从 typing_extensions 导入</span>
+<a id="__codelineno-53-2" name="__codelineno-53-2" href="#__codelineno-53-2"></a>
+<a id="__codelineno-53-3" name="__codelineno-53-3" href="#__codelineno-53-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">fail</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Never</span><span class="p">:</span>
+<a id="__codelineno-53-4" name="__codelineno-53-4" href="#__codelineno-53-4"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+<a id="__codelineno-53-5" name="__codelineno-53-5" href="#__codelineno-53-5"></a>
+<a id="__codelineno-53-6" name="__codelineno-53-6" href="#__codelineno-53-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">halt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Never</span><span class="p">:</span>
+<a id="__codelineno-53-7" name="__codelineno-53-7" href="#__codelineno-53-7"></a>    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<a id="__codelineno-53-8" name="__codelineno-53-8" href="#__codelineno-53-8"></a>        <span class="k">pass</span>
+</code></pre></div>
+<p><code>Never</code> 是<strong>底部类型（bottom type）</strong>——它表示"没有任何值属于这个类型"。它的实际价值在于<strong>让检查器做不可达代码分析</strong>：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-54-1" name="__codelineno-54-1" href="#__codelineno-54-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-54-2" name="__codelineno-54-2" href="#__codelineno-54-2"></a>    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-54-3" name="__codelineno-54-3" href="#__codelineno-54-3"></a>        <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;x 不能是 None&quot;</span><span class="p">)</span>     <span class="c1"># fail 返回 Never——检查器知道这之后不会继续执行</span>
+<a id="__codelineno-54-4" name="__codelineno-54-4" href="#__codelineno-54-4"></a>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>                   <span class="c1"># 这里检查器确认 x 不是 None（因为 None 分支已&quot;退出&quot;）</span>
+</code></pre></div>
+<p>因为 <code>fail</code> 标注了 <code>-&gt; Never</code>，检查器知道 <code>if x is None</code> 分支调用 <code>fail</code> 后<strong>不会返回</strong>，所以后面 <code>x + 1</code> 时 <code>x</code> 已经确定是 <code>int</code>（<code>None</code> 的可能已被排除）——这正好是第十二节讲过的<strong>类型收窄（narrowing）</strong>的配合。</p>
+<hr />
+<h2 id="narrowing">十二、类型收窄（Narrowing）——检查器如何"读懂"你的分支<a class="headerlink" href="#narrowing" title="Permanent link">&para;</a></h2>
+<p>前面多个地方都出现了"检查器知道你判空后就不是 None 了"，这里把机制讲清楚。</p>
+<h3 id="121">12.1 什么是类型收窄<a class="headerlink" href="#121" title="Permanent link">&para;</a></h3>
+<p><strong>类型收窄</strong>：检查器根据你的控制流（<code>if</code>、<code>isinstance</code> 等）<strong>自动缩小</strong>变量的可能类型范围。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-55-1" name="__codelineno-55-1" href="#__codelineno-55-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-55-2" name="__codelineno-55-2" href="#__codelineno-55-2"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>        <span class="c1"># 进入这个分支，x 被&quot;收窄&quot;为 int</span>
+<a id="__codelineno-55-3" name="__codelineno-55-3" href="#__codelineno-55-3"></a>        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>         <span class="c1"># ✅ x 是 int</span>
+<a id="__codelineno-55-4" name="__codelineno-55-4" href="#__codelineno-55-4"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-55-5" name="__codelineno-55-5" href="#__codelineno-55-5"></a>        <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>          <span class="c1"># ✅ 这里 x 被收窄为 str</span>
+</code></pre></div>
+<p>检查器不需要你手动 <code>cast</code>——它<strong>自己追踪</strong> <code>isinstance</code> 分支，知道 <code>if</code> 里面 <code>x</code> 是 <code>int</code>、<code>else</code> 里 <code>x</code> 是 <code>str</code>。</p>
+<h3 id="122">12.2 常见的收窄手段<a class="headerlink" href="#122" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-56-1" name="__codelineno-56-1" href="#__codelineno-56-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">handle</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-56-2" name="__codelineno-56-2" href="#__codelineno-56-2"></a>    <span class="c1"># 手段一：is None / is not None</span>
+<a id="__codelineno-56-3" name="__codelineno-56-3" href="#__codelineno-56-3"></a>    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-56-4" name="__codelineno-56-4" href="#__codelineno-56-4"></a>        <span class="k">return</span> <span class="mi">0</span>
+<a id="__codelineno-56-5" name="__codelineno-56-5" href="#__codelineno-56-5"></a>    <span class="k">return</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span>        <span class="c1"># 收窄为 int</span>
+<a id="__codelineno-56-6" name="__codelineno-56-6" href="#__codelineno-56-6"></a>
+<a id="__codelineno-56-7" name="__codelineno-56-7" href="#__codelineno-56-7"></a><span class="k">def</span><span class="w"> </span><span class="nf">handle2</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-56-8" name="__codelineno-56-8" href="#__codelineno-56-8"></a>    <span class="c1"># 手段二：isinstance</span>
+<a id="__codelineno-56-9" name="__codelineno-56-9" href="#__codelineno-56-9"></a>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<a id="__codelineno-56-10" name="__codelineno-56-10" href="#__codelineno-56-10"></a>        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>   <span class="c1"># 收窄为 str</span>
+<a id="__codelineno-56-11" name="__codelineno-56-11" href="#__codelineno-56-11"></a>    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<a id="__codelineno-56-12" name="__codelineno-56-12" href="#__codelineno-56-12"></a>
+<a id="__codelineno-56-13" name="__codelineno-56-13" href="#__codelineno-56-13"></a><span class="c1"># 手段三：真值判断（但要小心 0、&quot;&quot; 这些假值）</span>
+<a id="__codelineno-56-14" name="__codelineno-56-14" href="#__codelineno-56-14"></a><span class="k">def</span><span class="w"> </span><span class="nf">handle3</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-56-15" name="__codelineno-56-15" href="#__codelineno-56-15"></a>    <span class="k">if</span> <span class="n">x</span><span class="p">:</span>                    <span class="c1"># 收窄掉 None 和 0</span>
+<a id="__codelineno-56-16" name="__codelineno-56-16" href="#__codelineno-56-16"></a>        <span class="k">return</span> <span class="n">x</span>
+<a id="__codelineno-56-17" name="__codelineno-56-17" href="#__codelineno-56-17"></a>    <span class="k">return</span> <span class="mi">0</span>
+</code></pre></div>
+<h3 id="123">12.3 收窄失效的陷阱<a class="headerlink" href="#123" title="Permanent link">&para;</a></h3>
+<p><strong>陷阱一：赋值后收窄失效。</strong> 检查器只在<strong>它看得懂</strong>的情况下收窄，如果变量被函数调用"污染"，收窄会丢失：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-57-1" name="__codelineno-57-1" href="#__codelineno-57-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">process</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-57-2" name="__codelineno-57-2" href="#__codelineno-57-2"></a>    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-57-3" name="__codelineno-57-3" href="#__codelineno-57-3"></a>        <span class="k">return</span> <span class="mi">0</span>
+<a id="__codelineno-57-4" name="__codelineno-57-4" href="#__codelineno-57-4"></a>    <span class="n">some_function</span><span class="p">()</span>        <span class="c1"># 检查器保守起见——不知道 some_function 有没有改 x</span>
+<a id="__codelineno-57-5" name="__codelineno-57-5" href="#__codelineno-57-5"></a>    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>           <span class="c1"># ⚠️ 某些情况下检查器仍报 x 可能为 None</span>
+</code></pre></div>
+<p>（实际上闭包变量捕获 <code>x</code> 会被检查器视为"可能被修改"，导致收窄失效——这是新手常困惑的点。）</p>
+<p><strong>陷阱二：<code>isinstance</code> 才能精确收窄，<code>==</code> 不行。</strong> 用 <code>type(x) == int</code> 或 <code>==</code> 比较，检查器通常<strong>不能</strong>正确收窄，因为它不保证运行时行为——统一用 <code>isinstance</code>。</p>
+<p><strong>核心价值：</strong> 类型收窄是类型系统"读懂你的意图"的体现——你写正常的防御性判断（判空、判类型），检查器就自动帮你排除掉错误分支，不需要任何额外标注。</p>
+<hr />
+<h2 id="mypy-pyright">十三、工具：mypy 与 pyright<a class="headerlink" href="#mypy-pyright" title="Permanent link">&para;</a></h2>
+<p>类型标注写完了，谁来检查？两个主流工具。</p>
+<h3 id="131-mypy">13.1 mypy——事实标准<a class="headerlink" href="#131-mypy" title="Permanent link">&para;</a></h3>
+<p><strong>mypy</strong> 是 Python 类型检查的事实标准，由 Python 官方（Guido 参与）维护：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-58-1" name="__codelineno-58-1" href="#__codelineno-58-1"></a><span class="c1"># 安装</span>
+<a id="__codelineno-58-2" name="__codelineno-58-2" href="#__codelineno-58-2"></a>pip<span class="w"> </span>install<span class="w"> </span>mypy
+<a id="__codelineno-58-3" name="__codelineno-58-3" href="#__codelineno-58-3"></a>
+<a id="__codelineno-58-4" name="__codelineno-58-4" href="#__codelineno-58-4"></a><span class="c1"># 检查单个文件</span>
+<a id="__codelineno-58-5" name="__codelineno-58-5" href="#__codelineno-58-5"></a>mypy<span class="w"> </span>my_module.py
+<a id="__codelineno-58-6" name="__codelineno-58-6" href="#__codelineno-58-6"></a>
+<a id="__codelineno-58-7" name="__codelineno-58-7" href="#__codelineno-58-7"></a><span class="c1"># 检查整个项目</span>
+<a id="__codelineno-58-8" name="__codelineno-58-8" href="#__codelineno-58-8"></a>mypy<span class="w"> </span>src/
+<a id="__codelineno-58-9" name="__codelineno-58-9" href="#__codelineno-58-9"></a>
+<a id="__codelineno-58-10" name="__codelineno-58-10" href="#__codelineno-58-10"></a><span class="c1"># 严格模式——最严的检查，适合新项目</span>
+<a id="__codelineno-58-11" name="__codelineno-58-11" href="#__codelineno-58-11"></a>mypy<span class="w"> </span>--strict<span class="w"> </span>src/
+</code></pre></div>
+<p><strong>mypy 的配置</strong>（<code>pyproject.toml</code>）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-59-1" name="__codelineno-59-1" href="#__codelineno-59-1"></a><span class="k">[tool.mypy]</span>
+<a id="__codelineno-59-2" name="__codelineno-59-2" href="#__codelineno-59-2"></a><span class="n">python_version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;3.11&quot;</span>
+<a id="__codelineno-59-3" name="__codelineno-59-3" href="#__codelineno-59-3"></a><span class="n">strict</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">              </span><span class="c1"># 严格模式：隐式 Optional 也报错、禁止未标注的函数</span>
+<a id="__codelineno-59-4" name="__codelineno-59-4" href="#__codelineno-59-4"></a><span class="n">disallow_untyped_defs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">    </span><span class="c1"># 禁止未标注的函数定义</span>
+<a id="__codelineno-59-5" name="__codelineno-59-5" href="#__codelineno-59-5"></a><span class="n">warn_return_any</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">          </span><span class="c1"># 返回 Any 时警告</span>
+</code></pre></div>
+<p><strong>关键概念——mypy 是"渐进式"的：</strong> 你不需要一次性给整个项目标注完。mypy 允许<strong>逐步推进</strong>——先标核心模块，检查通过，再扩大范围。未标注的部分 mypy 默认放行（除非开了 <code>strict</code>）。这让"给已有项目加类型"这件事变得可行。</p>
+<h3 id="132-pyrightide">13.2 pyright——微软出品，IDE 友好<a class="headerlink" href="#132-pyrightide" title="Permanent link">&para;</a></h3>
+<p><strong>pyright</strong> 是微软出品，特点是<strong>速度快</strong>（用 TypeScript 写的，增量检查）、<strong>IDE 集成好</strong>（VS Code 的 Pylance 就是 pyright 的引擎）：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-60-1" name="__codelineno-60-1" href="#__codelineno-60-1"></a>pip<span class="w"> </span>install<span class="w"> </span>pyright
+<a id="__codelineno-60-2" name="__codelineno-60-2" href="#__codelineno-60-2"></a>pyright<span class="w"> </span>src/
+</code></pre></div>
+<p>pyright 和 mypy 的核心能力相似，选型经验：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>mypy</th>
+<th>pyright</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>维护方</td>
+<td>Python 官方/社区</td>
+<td>微软</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>较慢（全量分析）</td>
+<td>快（增量）</td>
+</tr>
+<tr>
+<td>IDE 集成</td>
+<td>需要插件</td>
+<td>原生（Pylance 内核）</td>
+</tr>
+<tr>
+<td>严格性默认</td>
+<td>适中</td>
+<td>更严格</td>
+</tr>
+<tr>
+<td>生态/插件</td>
+<td>更成熟</td>
+<td>增长快</td>
+</tr>
+</tbody>
+</table>
+<p><strong>学习目标里 mypy 是必学、pyright 是了解</strong>——把 mypy 用好即可，pyright 知道它存在、知道它是 VS Code Pylance 的内核就够。</p>
+<hr />
+<h2 id="project-3-100">十四、Project 3：给已有项目做 100% 类型标注<a class="headerlink" href="#project-3-100" title="Permanent link">&para;</a></h2>
+<h3 id="141">14.1 项目目标<a class="headerlink" href="#141" title="Permanent link">&para;</a></h3>
+<p>学习目标要求：<strong>把一个已有项目做到 100% 类型标注，并通过 mypy 检查。</strong></p>
+<p>"已有项目"可以直接用上一章的<strong>插件系统</strong>（<code>plugin_system/</code>），它已经有一部分标注了（<code>Document</code>、<code>Extractor</code>、异常体系里都有标注），正好作为练习对象。</p>
+<h3 id="142">14.2 正确的推进顺序（重要）<a class="headerlink" href="#142" title="Permanent link">&para;</a></h3>
+<p>不要试图"一次性全标完"，那是放弃的前奏。渐进式推进：</p>
+<p><strong>第 1 步：开严格检查，看基线。</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-61-1" name="__codelineno-61-1" href="#__codelineno-61-1"></a><span class="nb">cd</span><span class="w"> </span>示例代码/plugin_system
+<a id="__codelineno-61-2" name="__codelineno-61-2" href="#__codelineno-61-2"></a>mypy<span class="w"> </span>--strict<span class="w"> </span>src/doc_extractor/
+</code></pre></div>
+<p>先跑一次，看看<strong>当前有多少个错误</strong>——这是你的起点。别被错误数量吓到，渐进式推进本来就是"从 50 个错减到 0"。</p>
+<p><strong>第 2 步：从"叶子"开始，从下往上标。</strong></p>
+<p>先标<strong>没有依赖的底层模块</strong>（<code>document.py</code>、<code>exceptions.py</code>），再标依赖它们的上层（<code>reader.py</code>、<code>registry.py</code>、<code>loader.py</code>），最后标入口（<code>extractor.py</code>、<code>__main__.py</code>）。这样每标完一层，mypy 的报错会随之减少，而不是互相纠缠。</p>
+<p><strong>第 3 步：消灭 <code>Any</code>。</strong></p>
+<p>全项目搜 <code>Any</code>，逐个判断：真动态的（如 <code>json.loads</code> 结果）保留，偷懒的（能推断出具体类型的）改成精确类型。这一步最能体现"类型标注的质量"，而不只是"有没有标注"。</p>
+<p><strong>第 4 步：处理难啃的泛型。</strong></p>
+<p>插件系统里 <code>Registry</code> 存的是 <code>type[DocumentReader]</code>（见 1.4 节）、<code>loader.py</code> 返回 <code>list[ModuleType]</code>、<code>extractor._reader_for</code> 返回 <code>DocumentReader</code>——这些是体现你泛型/协议功力的地方。遇到 <code>Protocol</code>、<code>Generic</code> 的场景，用本教程第七、八节的知识精确标注。</p>
+<p><strong>第 5 步：mypy 零错误通过。</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-62-1" name="__codelineno-62-1" href="#__codelineno-62-1"></a>mypy<span class="w"> </span>--strict<span class="w"> </span>src/doc_extractor/
+<a id="__codelineno-62-2" name="__codelineno-62-2" href="#__codelineno-62-2"></a><span class="c1"># Success: no issues found in N source files</span>
+</code></pre></div>
+<h3 id="143">14.3 验收标准（毕业标准）<a class="headerlink" href="#143" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>全项目零 <code>Any</code></strong>（除 <code>json.loads</code> 这类真动态场景，且要有注释说明为什么）。</li>
+<li><strong><code>mypy --strict</code> 零错误</strong>——严格模式通过，不是默认模式。</li>
+<li><strong>所有函数都有完整的参数 + 返回值标注</strong>——不允许 <code>disallow_untyped_defs</code> 下的漏标。</li>
+<li><strong>协议和泛型用对</strong>——<code>Registry</code> 用 <code>Protocol</code>/ABC 精确标注，<code>extract_many</code> 的返回值是 <code>list[Document]</code> 而非 <code>list</code>。</li>
+<li><strong>IDE 里无类型报错</strong>——在 VS Code/PyCharm 里打开项目，不应该有红色波浪线（类型错误）。</li>
+</ol>
+<hr />
+<h2 id="_3">十五、全章速查表<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>知识点</th>
+<th>一句话要点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型标注的本质</td>
+<td>改变"检查时机"（写代码时 vs 运行时），<strong>不影响运行行为</strong></td>
+</tr>
+<tr>
+<td><code>Union</code> / <code>\|</code></td>
+<td>多种类型之一——<code>int \| float</code>（<code>\|</code> 语法需 3.10+）</td>
+</tr>
+<tr>
+<td><code>Optional</code></td>
+<td>"可能是 None"——<code>User \| None</code>，逼调用方判空</td>
+</tr>
+<tr>
+<td><code>Any</code></td>
+<td>类型系统的逃生舱——双向可赋、彻底不检查，滥用则检查归零</td>
+</tr>
+<tr>
+<td><code>Literal</code></td>
+<td>有限字面量作为类型——<code>Literal["read", "write"]</code></td>
+</tr>
+<tr>
+<td><code>Final</code></td>
+<td>标记"不可重新赋值"——静态约定，运行时<strong>不</strong>强制</td>
+</tr>
+<tr>
+<td><code>Callable</code></td>
+<td>描述函数类型——<code>Callable[[int], int]</code>（参数列表 + 返回类型）</td>
+</tr>
+<tr>
+<td><code>TypeAlias</code></td>
+<td>给类型起别名——显式标记消除"类型 vs 变量"歧义</td>
+</tr>
+<tr>
+<td><code>NewType</code></td>
+<td>创造静态新类型区分语义——运行时是零开销恒等函数</td>
+</tr>
+<tr>
+<td><code>TypeVar</code></td>
+<td>类型变量——<code>T = TypeVar("T")</code>，建立入参/返回的类型关联</td>
+</tr>
+<tr>
+<td><code>Generic</code></td>
+<td>泛型类——<code>class Box(Generic[T])</code>，<code>Box[int]</code> 指定类型</td>
+</tr>
+<tr>
+<td><code>Protocol</code></td>
+<td>结构化类型——有方法就算满足，<strong>不需继承</strong>，运行时零开销</td>
+</tr>
+<tr>
+<td><code>TypedDict</code></td>
+<td>给 dict 键值结构打标注——运行时就是普通 dict，无校验</td>
+</tr>
+<tr>
+<td><code>Annotated</code></td>
+<td>类型 + 元数据——<code>Annotated[int, Field(...)]</code> 供 pydantic 等消费</td>
+</tr>
+<tr>
+<td><code>Self</code></td>
+<td>返回"当前类型"——链式调用在继承下正确（3.11+）</td>
+</tr>
+<tr>
+<td><code>Never</code></td>
+<td>底部类型——"不返回"的函数，配合收窄做不可达分析</td>
+</tr>
+<tr>
+<td>类型收窄</td>
+<td>检查器根据 <code>isinstance</code>/<code>is None</code> 自动缩小类型范围</td>
+</tr>
+<tr>
+<td>mypy</td>
+<td>事实标准检查器——<code>--strict</code> 严格模式，渐进式推进</td>
+</tr>
+<tr>
+<td>pyright</td>
+<td>微软出品——快、IDE 集成好，是 VS Code Pylance 内核</td>
+</tr>
+<tr>
+<td>三层数据模型</td>
+<td><code>dataclass</code>（内部结构）/ <code>TypedDict</code>（内部流转）/ <code>pydantic</code>（外部输入）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="_4">十六、一条贯穿全章的判断<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>学完这些工具，最后记住一条贯穿全章的心法：</p>
+<blockquote>
+<p><strong>类型标注是"给工具写契约"，不是"给运行时加护栏"。</strong></p>
+</blockquote>
+<ul>
+<li>想要<strong>写代码时</strong>就抓住错误（拼错键、传错类型、忘判空）→ 用本教程的标注工具 + mypy。</li>
+<li>想要<strong>运行时</strong>拦住脏数据（外部输入不可信）→ 用 pydantic 的运行时校验（<code>Annotated</code> + <code>Field</code> 是两者的桥）。</li>
+<li>两者<strong>不冲突、也不互相替代</strong>——一个管"程序员自己写错的"，一个管"外部世界传来的脏东西"。</li>
+</ul>
+<p>类型系统替你承担了"记住每个变量类型"的认知负担，好让你把脑子省下来，花在真正难的逻辑上。这才是它的全部价值。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "content.code.copy", "search.suggest", "search.highlight"], "search": "../../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
